@@ -134,8 +134,8 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .depth-control > span { font-size: 15px; margin-bottom: 4px; }
 .depth-control > strong { font-size: 25px; font-weight: 400; letter-spacing: 0; white-space: nowrap; }
 .running-out .depth-control { background: #eb354c; color: white; border-color: #ff6070; animation: depth-warning 1s ease-in-out infinite; }
-.running-out .round-time-track span { background: #ff425b; animation: time-warning 1s ease-in-out infinite; }
-.round-time-track { grid-column: 1; height: 4px; background: #294059; }
+.round-time-track.running-out span { background: #ff425b; animation: time-warning 1s ease-in-out infinite; }
+.round-time-track { max-width: 660px; margin: 8px auto 0; height: 4px; background: #294059; }
 .round-time-track span { display: block; height: 100%; background: var(--cyan); transform-origin: left; transition: transform .2s linear; }
 .round-status { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 16px; margin: 0 auto 18px; max-width: 720px; color: #c5d9ea; font-size: 15px; }
 .round-status strong { font: 24px var(--pixel-font); color: var(--cyan); }

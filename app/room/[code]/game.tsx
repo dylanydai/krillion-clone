@@ -132,7 +132,7 @@ export default function Game({ code }: { code: string }): ReactNode {
   const locked = own?.result?.status === "scored" || own?.status === "judging" || own?.skipped === true;
   const showAnswer = room.phase === "playing" && seconds > 0 && !locked;
   const canAnswer = showAnswer && countdown === 0;
-  const timeRunningOut = canAnswer && room.endsAt !== null && room.endsAt - now < 5000;
+  const timeRunningOut = room.phase === "playing" && countdown === 0 && seconds > 0 && room.endsAt !== null && room.endsAt - now < 5000;
   const canRetry = own?.status === "done" && (own.result?.status === "retryable_error" || own.result?.errorCode === "SCORE_UNCERTAIN");
   const revealed = room.phase === "results" || room.phase === "leaderboard" || room.phase === "finished";
   const hasJudging = room.players.some((player: PublicPlayer): boolean => player.state === "judging");
@@ -166,11 +166,11 @@ export default function Game({ code }: { code: string }): ReactNode {
         {own.result?.status === "scored" && <span>{diving ? `Diving ${dive.roundPoints * METRES_PER_POINT} metres deeper…` : room.phase === "playing" ? "Waiting for the other players." : "Round complete."}</span>}
         {canRetry && room.phase === "playing" && <button className="secondary" disabled={busy !== null} onClick={(): void => { void act("retry", roundFields); }}>Retry saved answer</button>}
       </div>}
-      {showAnswer && <form className={`answer-form${timeRunningOut ? " running-out" : ""}`} onSubmit={(event: FormEvent<HTMLFormElement>): void => { event.preventDefault(); if (canAnswer) void act("answer", { ...roundFields, answer }); }}>
+      {showAnswer && <form className="answer-form" onSubmit={(event: FormEvent<HTMLFormElement>): void => { event.preventDefault(); if (canAnswer) void act("answer", { ...roundFields, answer }); }}>
         <label htmlFor="answer" className="sr-only">Your answer</label><input ref={answerInput} key={room.roundIndex} id="answer" value={answer} onChange={(event): void => setAnswer(event.target.value)} autoComplete="off" maxLength={120} required disabled={busy !== null || !canAnswer} placeholder={countdown > 0 ? "get ready…" : "type one answer…"} />
         <button className="dive-control" disabled={busy !== null || !canAnswer}>Dive</button>
-        <div className="round-time-track" role="progressbar" aria-label="Time remaining" aria-valuemin={0} aria-valuemax={ROUND_SECONDS} aria-valuenow={seconds}><span style={{ transform: `scaleX(${room.endsAt === null || room.startsAt === null ? 0 : Math.max(0, Math.min(1, (room.endsAt - now) / (room.endsAt - room.startsAt)))})` }} /></div>
       </form>}
+      {room.phase === "playing" && <div className={`round-time-track${timeRunningOut ? " running-out" : ""}`} role="progressbar" aria-label="Time remaining" aria-valuemin={0} aria-valuemax={ROUND_SECONDS} aria-valuenow={seconds}><span style={{ transform: `scaleX(${room.endsAt === null || room.startsAt === null ? 0 : Math.max(0, Math.min(1, (room.endsAt - now) / (room.endsAt - room.startsAt)))})` }} /></div>}
       {timeRunningOut && <span className="sr-only" role="alert">Less than five seconds remaining.</span>}
       {room.phase === "playing" && seconds === 0 && <p role="status">Time is up. Finishing submitted answers…</p>}
       </section>
