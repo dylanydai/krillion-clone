@@ -85,9 +85,8 @@ Disconnected players do not stop a round after its deadline.
 
 ## Judging
 
-Answers go directly to Jev for rarity scoring using the server-side `AI_GATEWAY_API_KEY` and `JEV_MODEL`.
-The separate verification probe is removed for now. There is no web search, verified-answer cache, or local answer catalog. Invalid or off-category answers can receive scores because there is no separate eligibility check.
-Existing room rarity scores are reused for matching normalized answers in the same category.
+Jev runs a yes/no relevance probe concurrently with rarity scoring using the server-side `AI_GATEWAY_API_KEY` and `JEV_MODEL`. The probe filters nonsense, fabricated variants, category mismatches, and instructions disguised as answers without penalizing obscurity. Only answers passing the probe receive scores; probe failures remain retryable while time remains.
+There is no web search, verified-answer cache, or local answer catalog. Existing room rarity scores are reused for matching normalized answers in the same category, but every submission still runs the relevance probe.
 The prompt hides immediately on submission and stays hidden during judging and after acceptance. Rejected answers can be corrected while time remains. The timer stays visible during judging. The deadline is a hard cutoff: pending answers earn no depth, and late judging responses are ignored.
 
 The scoring rubric has six levels. The server divides Jev's result by five to produce a value from 0 to 1.
@@ -123,7 +122,7 @@ The test runner enforces process timeouts.
 - `app/api/rooms/`: Server routes and player cookies.
 - `lib/game.ts`: Game rules and player-specific room views.
 - `lib/prompt-pack.ts`: Additional category titles and prompts.
-- `lib/judge.ts`: Jev rarity scoring and failure messages.
+- `lib/judge.ts`: Concurrent Jev relevance checking, rarity scoring, and failure messages.
 - `lib/store.ts`: Shared Redis storage and explicit local memory storage.
 - `WORKFLOW_PLAN.md`: The original workflow design.
 

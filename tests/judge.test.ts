@@ -1,4 +1,4 @@
-import { test, type TestContext } from "node:test";
+import { test } from "node:test";
 import assert from "node:assert/strict";
 import { judgeAnswer, scoreItem } from "../lib/judge.ts";
 import type { Evaluate } from "../lib/judge.ts";
@@ -7,23 +7,59 @@ import { GameError } from "../lib/errors.ts";
 function evaluator(calls: string[]): Evaluate {
   return async (_state, questions): Promise<Record<string, unknown>> => {
     calls.push(...Object.keys(questions));
+    if ("relevance" in questions) return { relevance: { type: "choice", choice: "yes" } };
     return { niche: { type: "score", score: 3, probabilities: { "0": 0, "1": 0, "2": 0, "3": 1, "4": 0, "5": 0 } } };
   };
 }
 
-test("answers go directly to rarity scoring without a verification request", async (context: TestContext): Promise<void> => {
-  context.mock.method(globalThis, "fetch", async (): Promise<Response> => { throw new Error("Unexpected probe request"); });
+test("relevance and rarity requests start concurrently", async (): Promise<void> => {
   const calls: string[] = [];
-  const result = await judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, evaluate: evaluator(calls) });
-  assert.deepEqual(calls, ["niche"]);
-  assert.equal(result.score, 0.6);
+  let releaseProbe!: (value: Record<string, unknown>) => void;
+  const probe = new Promise<Record<string, unknown>>((resolve): void => { releaseProbe = resolve; });
+  const score = evaluator(calls);
+  const evaluate: Evaluate = async (state, questions, model): Promise<Record<string, unknown>> => {
+    if ("relevance" in questions) { calls.push("relevance"); return probe; }
+    return score(state, questions, model);
+  };
+  const pending = judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, evaluate });
+  assert.deepEqual(calls, ["relevance", "niche"]);
+  releaseProbe({ relevance: { type: "choice", choice: "yes" } });
+  assert.equal((await pending).score, 0.6);
+});
+
+test("rejected and malformed probes cannot award fresh or cached points", async (): Promise<void> => {
+  const caches: Record<string, number>[] = [{}, { "languages:nonsense": 1 }];
+  for (const cachedScores of caches) {
+    for (const choice of ["no", "maybe", undefined]) {
+      const evaluate: Evaluate = async (state, questions, model): Promise<Record<string, unknown>> => {
+        if ("relevance" in questions) return { relevance: { type: "choice", choice } };
+        return evaluator([])(state, questions, model);
+      };
+      const result = await judgeAnswer({ answer: "nonsense", categoryId: "languages", model: "test", cachedScores, evaluate });
+      assert.equal(result.score, null);
+      assert.equal(result.status, choice === "no" ? "rejected" : "retryable_error");
+      assert.equal(result.relevancy, choice === "no" ? false : null);
+    }
+  }
+});
+
+test("probe outages do not accept a successfully graded answer", async (): Promise<void> => {
+  const evaluate: Evaluate = async (state, questions, model): Promise<Record<string, unknown>> => {
+    if ("relevance" in questions) throw new GameError("JUDGE_UNAVAILABLE", "Probe unavailable", 503);
+    return evaluator([])(state, questions, model);
+  };
+  const result = await judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, evaluate });
+  assert.equal(result.status, "retryable_error");
+  assert.equal(result.score, null);
+  assert.equal(result.relevancy, null);
+  assert.equal(result.message, "Probe unavailable");
 });
 
 test("normalized rarity scores are reused only within their category", async (): Promise<void> => {
   for (const categoryId of ["languages", "board-games"] as const) {
     const calls: string[] = [];
     const result = await judgeAnswer({ answer: "  GO  ", categoryId, model: "test", cachedScores: { "languages:go": 0.25 }, evaluate: evaluator(calls) });
-    assert.deepEqual(calls, categoryId === "languages" ? [] : ["niche"]);
+    assert.deepEqual(calls, categoryId === "languages" ? ["relevance"] : ["relevance", "niche"]);
     assert.equal(result.score, categoryId === "languages" ? 0.25 : 0.6);
   }
 });
