@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": ".test-build",
+    "rootDir": ".",
+    "incremental": false,
+    "rewriteRelativeImportExtensions": true,
+    "types": ["node"],
+    "plugins": []
+  },
+  "include": ["tests/**/*.ts"],
+  "exclude": ["node_modules", ".test-build"]
+}
