@@ -126,6 +126,7 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .answer-dock { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 22px max(18px, env(safe-area-inset-bottom)); background: linear-gradient(transparent, #050d19e8 30%, #050d19); z-index: 3; text-align: center; }
 .answer-form { display: grid; grid-template-columns: minmax(0, 1fr) 100px; align-items: center; gap: 8px 12px; max-width: 660px; margin: auto; }
 .answer-form input { height: 62px; font: 28px var(--pixel-font); border-color: #73bfce; background: #0b192cdd; }
+.answer-form input:focus-visible { outline: none; }
 .answer-form input:disabled { background: #28303a; border-color: #626b78; color: #949ba7; box-shadow: inset 3px 3px #1c232c; cursor: not-allowed; }
 .answer-form input:disabled::placeholder { color: #949ba7; }
 .round-countdown { position: absolute; top: 52%; left: 50%; transform: translate(-50%, -50%); z-index: 3; display: grid; gap: 8px; text-align: center; color: var(--cyan); pointer-events: none; text-shadow: 0 2px #071221, 0 0 24px #80dfeb66; }
