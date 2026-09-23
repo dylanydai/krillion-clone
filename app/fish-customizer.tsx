@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { CSSProperties, FormEvent, ReactNode } from "react";
-import { FISH_COLORS, parseFishColor, type FishColor } from "../lib/fish";
+import { parseFishColor, type FishColor } from "../lib/fish";
 import FishSprite from "./fish-sprite";
 
 export default function FishCustomizer({ color, busy, onSave }: { color: FishColor; busy: boolean; onSave: (color: FishColor) => Promise<void> }): ReactNode {
@@ -23,7 +23,6 @@ export default function FishCustomizer({ color, busy, onSave }: { color: FishCol
     <fieldset className="fish-customizer" disabled={busy} style={{ "--fish-color": preview } as CSSProperties}>
       <legend>Your fish colour</legend>
       <div className="fish-preview"><FishSprite color={preview} /><span>{preview}</span></div>
-      <div className="fish-colors">{Object.values(FISH_COLORS).map((preset): ReactNode => <button key={preset.hex} type="button" className="color-choice" style={{ "--fish-color": preset.hex } as CSSProperties} aria-label={preset.label} aria-pressed={preview === preset.hex.toUpperCase()} onClick={(): void => change(preset.hex.toUpperCase())}><FishSprite color={preset.hex} /></button>)}</div>
       <label htmlFor="fish-hex">Hex colour</label>
       <div className="hex-controls">
         <input type="color" aria-label="Pick fish colour" value={preview} onChange={(event): void => change(event.target.value.toUpperCase())} />
