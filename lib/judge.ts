@@ -1,6 +1,5 @@
 import { categoryById, normalizeName } from "./categories.ts";
 import { GameError, MESSAGES } from "./errors.ts";
-import { verifyAnswer, type Verify } from "./verify.ts";
 import type { CategoryId, Judgment } from "./types.ts";
 
 type AcceptedAnswer = { id: string; name: string };
@@ -105,22 +104,10 @@ export async function scoreItem(options: { item: AcceptedAnswer; categoryId: Cat
   }
 }
 
-export async function judgeAnswer(options: { answer: string; categoryId: CategoryId; model: string; cachedScores: Record<string, number>; evaluate?: Evaluate; verify?: Verify }): Promise<Judgment> {
-  const { answer, categoryId, model, cachedScores, evaluate = evaluateJev, verify = verifyAnswer } = options;
+export async function judgeAnswer(options: { answer: string; categoryId: CategoryId; model: string; cachedScores: Record<string, number>; evaluate?: Evaluate }): Promise<Judgment> {
+  const { answer, categoryId, model, cachedScores, evaluate = evaluateJev } = options;
   const item: AcceptedAnswer = { id: `${categoryId}:${normalizeName(answer)}`, name: answer.normalize("NFKC").trim().replace(/\s+/g, " ") };
   const cached = cachedScores[item.id];
-  const [verification, scoring] = await Promise.allSettled([
-    verify({ answer, category: categoryById(categoryId) }),
-    cached === undefined
-      ? scoreItem({ item, categoryId, model, evaluate })
-      : Promise.resolve<Judgment>({ status: "scored", relevancy: true, score: cached, canonicalId: item.id, canonicalName: item.name, errorCode: null, message: null }),
-  ]);
-  if (verification.status === "rejected") {
-    const error: unknown = verification.reason;
-    if (!(error instanceof GameError) || !SERVICE_ERRORS.has(error.code)) throw error;
-    return { ...failure(error.code), message: error.message };
-  }
-  if (!verification.value) return failure("INVALID_ITEM", false);
-  if (scoring.status === "rejected") throw scoring.reason;
-  return scoring.value;
+  if (cached !== undefined) return { status: "scored", relevancy: true, score: cached, canonicalId: item.id, canonicalName: item.name, errorCode: null, message: null };
+  return scoreItem({ item, categoryId, model, evaluate });
 }

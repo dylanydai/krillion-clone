@@ -85,14 +85,10 @@ Disconnected players do not stop a round after its deadline.
 
 ## Judging
 
-Each answer goes to Qwen3-14B (`alibaba/qwen-3-14b`), an Apache-2.0 model, which answers directly from its own knowledge without web search or retrieval. The verifier output is capped at 16 tokens.
-The verifier returns exactly YES or NO. Regional and translated editions do not qualify as distinct items unless the prompt explicitly asks for editions. Its prompt rejects invented variants such as “Chinese Catan” unless it recognizes the exact qualifying item, and treats player answers as untrusted data.
-Verification and Jev rarity scoring run concurrently. Only YES allows the score to be used; NO rejects the answer and discards the speculative score. This also means rejected answers can incur Jev usage. There is no unresolved verification verdict.
-Both requests use the existing server-side `AI_GATEWAY_API_KEY`. Set `VERIFIER_MODEL` to override the verifier; `JEV_MODEL` still controls rarity scoring.
-Every submission gets a fresh verification request, even if its rarity score already exists in the room. There is no verified-answer cache, local answer catalog, whitelist, or alias table. Adding a category requires a title and prompt, plus an internal ID.
+Answers go directly to Jev for rarity scoring using the server-side `AI_GATEWAY_API_KEY` and `JEV_MODEL`.
+The separate verification probe is removed for now. There is no web search, verified-answer cache, or local answer catalog. Invalid or off-category answers can receive scores because there is no separate eligibility check.
+Existing room rarity scores are reused for matching normalized answers in the same category.
 The prompt hides immediately on submission and stays hidden during judging and after acceptance. Rejected answers can be corrected while time remains. The timer stays visible during judging. The deadline is a hard cutoff: pending answers earn no depth, and late judging responses are ignored.
-
-Verification has a 15-second timeout. Service failures and malformed outputs are retryable errors, not NO verdicts. The model can still make factual mistakes; a binary verdict is not a guarantee of truth.
 
 The scoring rubric has six levels. The server divides Jev's result by five to produce a value from 0 to 1.
 The game converts that value to depth with `Math.round(value * 100) * 10` metres.
@@ -127,13 +123,10 @@ The test runner enforces process timeouts.
 - `app/api/rooms/`: Server routes and player cookies.
 - `lib/game.ts`: Game rules and player-specific room views.
 - `lib/prompt-pack.ts`: Additional category titles and prompts.
-- `lib/judge.ts`: Verification gate, Jev rarity scoring, and failure messages.
-- `lib/verify.ts`: Direct YES/NO verification through Vercel AI Gateway.
+- `lib/judge.ts`: Jev rarity scoring and failure messages.
 - `lib/store.ts`: Shared Redis storage and explicit local memory storage.
 - `WORKFLOW_PLAN.md`: The original workflow design.
 
 The API uses [Vercel's HTTP evaluation endpoint](https://vercel.com/docs/ai-gateway/modalities/evaluation).
 The score follows [Jev's ordered rubric levels](https://docs.typesafe.ai/primitives/score).
 The storage adapter uses the [Upstash Redis REST API](https://upstash.com/docs/redis/features/restapi).
-
-Verification uses [Qwen3-14B](https://huggingface.co/Qwen/Qwen3-14B) through Gateway Chat Completions, without search tools.
