@@ -107,14 +107,20 @@ export async function scoreItem(options: { item: AcceptedAnswer; categoryId: Cat
 
 export async function judgeAnswer(options: { answer: string; categoryId: CategoryId; model: string; cachedScores: Record<string, number>; evaluate?: Evaluate; verify?: Verify }): Promise<Judgment> {
   const { answer, categoryId, model, cachedScores, evaluate = evaluateJev, verify = verifyAnswer } = options;
-  try {
-    if (!await verify({ answer, category: categoryById(categoryId) })) return failure("INVALID_ITEM", false);
-  } catch (error: unknown) {
+  const item: AcceptedAnswer = { id: `${categoryId}:${normalizeName(answer)}`, name: answer.normalize("NFKC").trim().replace(/\s+/g, " ") };
+  const cached = cachedScores[item.id];
+  const [verification, scoring] = await Promise.allSettled([
+    verify({ answer, category: categoryById(categoryId) }),
+    cached === undefined
+      ? scoreItem({ item, categoryId, model, evaluate })
+      : Promise.resolve<Judgment>({ status: "scored", relevancy: true, score: cached, canonicalId: item.id, canonicalName: item.name, errorCode: null, message: null }),
+  ]);
+  if (verification.status === "rejected") {
+    const error: unknown = verification.reason;
     if (!(error instanceof GameError) || !SERVICE_ERRORS.has(error.code)) throw error;
     return { ...failure(error.code), message: error.message };
   }
-  const item: AcceptedAnswer = { id: `${categoryId}:${normalizeName(answer)}`, name: answer.normalize("NFKC").trim().replace(/\s+/g, " ") };
-  const cached = cachedScores[item.id];
-  if (cached !== undefined) return { status: "scored", relevancy: true, score: cached, canonicalId: item.id, canonicalName: item.name, errorCode: null, message: null };
-  return scoreItem({ item, categoryId, model, evaluate });
+  if (!verification.value) return failure("INVALID_ITEM", false);
+  if (scoring.status === "rejected") throw scoring.reason;
+  return scoring.value;
 }

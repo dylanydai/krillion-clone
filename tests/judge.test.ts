@@ -5,12 +5,49 @@ import type { Evaluate } from "../lib/judge.ts";
 import { GameError } from "../lib/errors.ts";
 import type { Verify } from "../lib/verify.ts";
 
+function deferred<T>(): { promise: Promise<T>; resolve: (value: T) => void } {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((complete): void => { resolve = complete; });
+  return { promise, resolve };
+}
+
 function evaluator(calls: string[]): Evaluate {
   return async (_state, questions): Promise<Record<string, unknown>> => {
     calls.push(...Object.keys(questions));
     return { niche: { type: "score", score: 3, probabilities: { "0": 0, "1": 0, "2": 0, "3": 1, "4": 0, "5": 0 } } };
   };
 }
+
+test("verification and scoring start together and both must finish before awarding depth", async (): Promise<void> => {
+  const verification = deferred<boolean>();
+  const scoring = deferred<Record<string, unknown>>();
+  const calls: string[] = [];
+  const verify: Verify = (): Promise<boolean> => { calls.push("verify"); return verification.promise; };
+  const evaluate: Evaluate = (): Promise<Record<string, unknown>> => { calls.push("niche"); return scoring.promise; };
+  let finished = false;
+  const pending = judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, verify, evaluate }).then((result): typeof result => { finished = true; return result; });
+  assert.deepEqual(calls, ["verify", "niche"]);
+  scoring.resolve({ niche: { type: "score", score: 3, probabilities: { "0": 0, "1": 0, "2": 0, "3": 1, "4": 0, "5": 0 } } });
+  await scoring.promise;
+  assert.equal(finished, false);
+  verification.resolve(true);
+  assert.equal((await pending).score, 0.6);
+});
+
+test("NO discards a concurrently generated score", async (): Promise<void> => {
+  const calls: string[] = [];
+  const result = await judgeAnswer({ answer: "Chinese Catan", categoryId: "board-games", model: "test", cachedScores: {}, verify: async (): Promise<boolean> => false, evaluate: evaluator(calls) });
+  assert.deepEqual(calls, ["niche"]);
+  assert.equal(result.status, "rejected");
+  assert.equal(result.score, null);
+});
+
+test("a failed speculative score cannot override NO, but propagates after YES", async (): Promise<void> => {
+  const evaluate: Evaluate = async (): Promise<Record<string, unknown>> => { throw new Error("Scoring failed"); };
+  const options = { answer: "Uiua", categoryId: "languages" as const, model: "test", cachedScores: {}, evaluate };
+  assert.equal((await judgeAnswer({ ...options, verify: async (): Promise<boolean> => false })).status, "rejected");
+  await assert.rejects(judgeAnswer({ ...options, verify: async (): Promise<boolean> => true }), /Scoring failed/);
+});
 
 test("an obscure verified answer reaches Jev only for rarity", async (): Promise<void> => {
   const calls: string[] = [];
@@ -25,7 +62,7 @@ test("an obscure verified answer reaches Jev only for rarity", async (): Promise
   assert.equal(result.score, 0.6);
 });
 
-test("NO rejects the answer without scoring, even when a score is cached", async (): Promise<void> => {
+test("NO rejects the answer even when a score is cached", async (): Promise<void> => {
   const calls: string[] = [];
   const result = await judgeAnswer({ answer: "Chinese Catan", categoryId: "board-games", model: "test", cachedScores: { "board-games:chinese catan": 1 }, verify: async (): Promise<boolean> => false, evaluate: evaluator(calls) });
   assert.deepEqual(calls, []);
@@ -35,12 +72,12 @@ test("NO rejects the answer without scoring, even when a score is cached", async
   assert.equal(result.errorCode, "INVALID_ITEM");
 });
 
-test("verification failures stay retryable and never invoke Jev", async (): Promise<void> => {
+test("verification failures discard concurrent scores and stay retryable", async (): Promise<void> => {
   for (const code of ["JUDGE_UNAVAILABLE", "JUDGE_BILLING_REQUIRED"]) {
     const calls: string[] = [];
     const verify: Verify = async (): Promise<boolean> => { throw new GameError(code, "Verification failed", 503); };
     const result = await judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, verify, evaluate: evaluator(calls) });
-    assert.deepEqual(calls, []);
+    assert.deepEqual(calls, ["niche"]);
     assert.equal(result.status, "retryable_error");
     assert.equal(result.errorCode, code);
     assert.equal(result.score, null);
@@ -48,7 +85,7 @@ test("verification failures stay retryable and never invoke Jev", async (): Prom
 });
 
 test("unexpected verifier errors propagate", async (): Promise<void> => {
-  await assert.rejects(judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, verify: async (): Promise<boolean> => { throw new Error("bug"); } }), /bug/);
+  await assert.rejects(judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, verify: async (): Promise<boolean> => { throw new Error("bug"); }, evaluate: evaluator([]) }), /bug/);
 });
 
 test("verified names reuse normalized scores only within their category", async (): Promise<void> => {
