@@ -23,7 +23,9 @@ test("verifier uses the Gateway key, exact answer, category, and bounded search"
     assert.deepEqual(JSON.parse(body.messages[1].content), INPUT);
     assert.match(body.messages[0].content, /Chinese Catan/);
     assert.match(body.messages[0].content, /untrusted data/);
-    assert.deepEqual(body.tools, [{ type: "vercel:perplexity_search", config: { query: '"Chinese Catan" Board games', max_results: 3 } }]);
+    assert.deepEqual(body.tools, [{ type: "vercel:exa_search", config: { query: '"Chinese Catan" Board games', type: "fast", num_results: 3, contents: { highlights: { max_characters: 1200 } } } }]);
+    assert.equal(body.max_tokens, 16);
+    assert.equal(init.cache, "no-store");
     assert.ok(init.signal instanceof AbortSignal);
     return Response.json({ choices: [{ finish_reason: "stop", message: { content: "NO" } }] });
   });

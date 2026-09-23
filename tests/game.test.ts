@@ -140,6 +140,18 @@ test("same item receives one score even if concurrent judges disagree", (): void
   assert.deepEqual(view.players.map((player): number => player.points), [20, 20]);
 });
 
+test("an answer received just before the deadline can finish judging afterward", (): void => {
+  const room = setup();
+  const deadline = currentRound(room).endsAt;
+  const reserved = reserveAnswer({ room, token: HOST, answer: "Uiua", roundIndex: 0, now: deadline - 1, retry: false });
+  settleRound(room, deadline + 1000);
+  assert.equal(room.phase, "playing");
+  assert.equal(currentRound(room).answers[reserved.playerId].status, "judging");
+  finishAnswer({ room, roundIndex: 0, playerId: reserved.playerId, attemptId: reserved.attempt.id, judgment: judgment(), now: deadline + 10_000 });
+  assert.equal(currentRound(room).answers[reserved.playerId].receivedAt, deadline - 1);
+  assert.equal(currentRound(room).answers[reserved.playerId].result?.status, "scored");
+});
+
 test("submissions and saved-answer retries continue past five attempts", (): void => {
   const room = setup();
   for (let index = 0; index < 12; index += 1) {

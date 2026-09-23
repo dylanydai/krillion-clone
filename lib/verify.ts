@@ -33,12 +33,12 @@ export const verifyAnswer: Verify = async ({ answer, category }): Promise<boolea
       body: JSON.stringify({
         model: process.env.VERIFIER_MODEL ?? "alibaba/qwen-3-14b",
         temperature: 0,
-        max_tokens: 128,
+        max_tokens: 16,
         messages: [
           { role: "system", content: VERIFIER_PROMPT },
           { role: "user", content: JSON.stringify({ category, answer }) },
         ],
-        tools: [{ type: "vercel:perplexity_search", config: { query: `${JSON.stringify(answer)} ${category.title}`, max_results: 3 } }],
+        tools: [{ type: "vercel:exa_search", config: { query: `${JSON.stringify(answer)} ${category.title}`, type: "fast", num_results: 3, contents: { highlights: { max_characters: 1200 } } } }],
       }),
       signal: AbortSignal.timeout(VERIFY_TIMEOUT_MS),
       cache: "no-store",

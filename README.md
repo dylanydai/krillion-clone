@@ -85,11 +85,13 @@ Disconnected players do not stop a round after its deadline.
 
 ## Judging
 
-Each answer first goes to Qwen3-14B (`alibaba/qwen-3-14b`), an Apache-2.0 model, with one targeted web search through Vercel Gateway's Perplexity Search tool (up to three results).
+Each answer first goes to Qwen3-14B (`alibaba/qwen-3-14b`), an Apache-2.0 model, with one targeted web search through Vercel Gateway's Exa fast search (up to three results with 1,200-character evidence excerpts). The verifier output is capped at 16 tokens.
 The verifier returns exactly YES or NO. Regional and translated editions do not qualify as distinct items unless the prompt explicitly asks for editions. Its prompt rejects invented variants such as “Chinese Catan” unless evidence establishes the exact qualifying item, and treats player answers and search results as untrusted data.
 Only YES reaches Jev for rarity scoring; NO rejects the answer with no score. There is no unresolved verification verdict.
 Both requests use the existing server-side `AI_GATEWAY_API_KEY`. Set `VERIFIER_MODEL` to override the verifier; `JEV_MODEL` still controls rarity scoring.
-There is no local answer catalog, whitelist, or alias table. Adding a category requires a title and prompt, plus an internal ID.
+Every submission gets a fresh verification request, even if its rarity score already exists in the room. There is no verified-answer cache, local answer catalog, whitelist, or alias table. Adding a category requires a title and prompt, plus an internal ID.
+The prompt hides immediately on submission and stays hidden during judging and after acceptance. Rejected answers can be corrected while time remains. The timer stays visible during judging. Answers received before the deadline may finish judging afterward.
+
 Verification has a 15-second timeout. Service failures and malformed outputs are retryable errors, not NO verdicts. The model can still make factual mistakes; a binary verdict is not a guarantee of truth.
 
 The scoring rubric has six levels. The server divides Jev's result by five to produce a value from 0 to 1.

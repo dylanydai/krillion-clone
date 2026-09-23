@@ -60,6 +60,18 @@ test("verified names reuse normalized scores only within their category", async 
   }
 });
 
+test("every submission is freshly verified even with an existing rarity score", async (): Promise<void> => {
+  let verifications = 0;
+  const verify: Verify = async (): Promise<boolean> => {
+    verifications += 1;
+    return true;
+  };
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    await judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: { "languages:uiua": 0.9 }, verify });
+  }
+  assert.equal(verifications, 2);
+});
+
 test("a scoring outage preserves accepted relevance with no score", async (): Promise<void> => {
   const item = { id: "languages:python", name: "Python" };
   const evaluate: Evaluate = async (): Promise<Record<string, unknown>> => { throw new GameError("JUDGE_UNAVAILABLE", "Unavailable", 503); };
