@@ -11,6 +11,7 @@ export class GameError extends Error {
 }
 
 export const MESSAGES: Record<string, string> = {
+  JUDGING_EXPIRED: "Time ran out before judging finished. No depth earned.",
   INVALID_ITEM: "This answer is not a verified item for this category. Try another answer.",
   WRONG_CATEGORY: "This item does not fit this prompt. Try another answer.",
   UNVERIFIED_ITEM: "The judge could not confidently verify this answer. Try its established name or another answer.",

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cleanCode, createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, rematch, reserveAnswer, settleRound, skipAnswer, startGame, JUDGING_GRACE_MS, JUDGE_LEASE_MS } from "../lib/game.ts";
+import { cleanCode, createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, rematch, reserveAnswer, settleRound, skipAnswer, startGame } from "../lib/game.ts";
 import { parseAction } from "../lib/service.ts";
 import { diveProgress } from "../lib/dive.ts";
 import { COUNTDOWN_SECONDS, ROUNDS_PER_GAME, ROUND_SECONDS } from "../lib/game-config.ts";
@@ -121,7 +121,7 @@ test("retries keep receipt time and accepted answers cannot be replaced", (): vo
   const reserved = reserveAnswer({ room, token: HOST, answer: "Python", roundIndex: 0, now: NOW + 4000, retry: false });
   assert.throws(() => reserveAnswer({ room, token: HOST, answer: "Java", roundIndex: 0, now: NOW + 5000, retry: false }), /already being judged/);
   finishAnswer({ room, roundIndex: 0, playerId: reserved.playerId, attemptId: reserved.attempt.id, judgment: failure("JUDGE_UNAVAILABLE"), now: NOW + 6000 });
-  const retry = reserveAnswer({ room, token: HOST, answer: "Java", roundIndex: 0, now: currentRound(room).endsAt + 1000, retry: true });
+  const retry = reserveAnswer({ room, token: HOST, answer: "Java", roundIndex: 0, now: NOW + 6500, retry: true });
   assert.equal(retry.attempt.answer, "Python");
   assert.equal(retry.attempt.receivedAt, NOW + 4000);
   finishAnswer({ room, roundIndex: 0, playerId: retry.playerId, attemptId: reserved.attempt.id, judgment: judgment(1), now: NOW + 7000 });
@@ -140,16 +140,36 @@ test("same item receives one score even if concurrent judges disagree", (): void
   assert.deepEqual(view.players.map((player): number => player.points), [20, 20]);
 });
 
-test("an answer received just before the deadline can finish judging afterward", (): void => {
+test("the deadline drops pending answers and ignores scores arriving after advancement", (): void => {
   const room = setup();
   const deadline = currentRound(room).endsAt;
   const reserved = reserveAnswer({ room, token: HOST, answer: "Uiua", roundIndex: 0, now: deadline - 1, retry: false });
-  settleRound(room, deadline + 1000);
-  assert.equal(room.phase, "playing");
-  assert.equal(currentRound(room).answers[reserved.playerId].status, "judging");
-  finishAnswer({ room, roundIndex: 0, playerId: reserved.playerId, attemptId: reserved.attempt.id, judgment: judgment(), now: deadline + 10_000 });
-  assert.equal(currentRound(room).answers[reserved.playerId].receivedAt, deadline - 1);
-  assert.equal(currentRound(room).answers[reserved.playerId].result?.status, "scored");
+  settleRound(room, deadline);
+  assert.equal(room.phase, "results");
+  assert.equal(reserved.attempt.result?.errorCode, "JUDGING_EXPIRED");
+  assert.equal(reserved.attempt.leaseUntil, 0);
+  nextRound(room, HOST, deadline);
+  nextRound(room, HOST, deadline);
+  finishAnswer({ room, roundIndex: 0, playerId: reserved.playerId, attemptId: reserved.attempt.id, judgment: judgment(), now: deadline + 1000 });
+  assert.equal(reserved.attempt.result?.score, null);
+  assert.deepEqual(room.scores, {});
+});
+
+test("a verdict arriving at the deadline cannot score even before a poll settles the room", (): void => {
+  const room = setup();
+  const deadline = currentRound(room).endsAt;
+  const reserved = reserveAnswer({ room, token: HOST, answer: "Uiua", roundIndex: 0, now: deadline - 1, retry: false });
+  finishAnswer({ room, roundIndex: 0, playerId: reserved.playerId, attemptId: reserved.attempt.id, judgment: judgment(), now: deadline });
+  assert.equal(room.phase, "results");
+  assert.equal(reserved.attempt.result?.errorCode, "JUDGING_EXPIRED");
+  assert.deepEqual(room.scores, {});
+});
+
+test("saved answers cannot be retried after the deadline", (): void => {
+  const room = setup();
+  const reserved = reserveAnswer({ room, token: HOST, answer: "Uiua", roundIndex: 0, now: NOW + 4000, retry: false });
+  finishAnswer({ room, roundIndex: 0, playerId: reserved.playerId, attemptId: reserved.attempt.id, judgment: failure("JUDGE_UNAVAILABLE"), now: NOW + 5000 });
+  assert.throws((): void => { reserveAnswer({ room, token: HOST, answer: "", roundIndex: 0, now: currentRound(room).endsAt, retry: true }); }, /judging window has closed/);
 });
 
 test("submissions and saved-answer retries continue past five attempts", (): void => {
@@ -171,10 +191,11 @@ test("submissions and saved-answer retries continue past five attempts", (): voi
 test("missing players and crashed requests cannot block a round forever", (): void => {
   const room = setup();
   const reserved = reserveAnswer({ room, token: HOST, answer: "Python", roundIndex: 0, now: NOW + 4000, retry: false });
-  settleRound(room, NOW + 4000 + JUDGE_LEASE_MS);
+  reserved.attempt.leaseUntil = NOW + 5000;
+  settleRound(room, NOW + 5000);
   assert.equal(currentRound(room).answers[reserved.playerId].result?.status, "retryable_error");
   assert.equal(room.phase, "playing");
-  settleRound(room, currentRound(room).endsAt + JUDGING_GRACE_MS);
+  settleRound(room, currentRound(room).endsAt);
   assert.equal(room.phase, "results");
   assert.equal(publicRoom(room, HOST, NOW).players[0].points, 0);
 });

@@ -10,7 +10,6 @@ import { COUNTDOWN_SECONDS, ROUNDS_PER_GAME, ROUND_SECONDS } from "./game-config
 
 export { ROUNDS_PER_GAME, ROUND_SECONDS } from "./game-config.ts";
 export const JUDGE_LEASE_MS = 35_000;
-export const JUDGING_GRACE_MS = 60_000;
 
 export function sessionHash(token: string): string {
   return createHash("sha256").update(token).digest("hex");
@@ -96,9 +95,10 @@ export function settleRound(room: Room, now: number): void {
   if (room.phase !== "playing" && room.phase !== "results") return;
   const round = currentRound(room);
   for (const attempt of Object.values(round.answers)) {
-    if (attempt.status === "judging" && attempt.leaseUntil <= now) {
+    if (attempt.status === "judging" && (now >= round.endsAt || attempt.leaseUntil <= now)) {
       attempt.status = "done";
-      attempt.result = failure("JUDGE_UNAVAILABLE");
+      attempt.leaseUntil = 0;
+      attempt.result = now >= round.endsAt ? failure("JUDGING_EXPIRED", false) : failure("JUDGE_UNAVAILABLE");
     }
   }
   if (room.phase !== "playing") return;
@@ -106,8 +106,7 @@ export function settleRound(room: Room, now: number): void {
   const finished = attempts.every((attempt: Attempt | undefined): boolean => attempt !== undefined && attempt.status === "done" && (attempt.skipped || attempt.result?.status === "scored"));
   if (finished) room.phase = "results";
   if (now < round.endsAt) return;
-  const waiting = attempts.some((attempt: Attempt | undefined): boolean => attempt !== undefined && (attempt.status === "judging" || attempt.result?.status === "retryable_error"));
-  if (!waiting || now >= round.endsAt + JUDGING_GRACE_MS) room.phase = "results";
+  room.phase = "results";
 }
 
 export function nextRound(room: Room, token: string, now: number): void {
@@ -147,7 +146,7 @@ export function reserveAnswer(options: { room: Room; token: string; answer: stri
   let receivedAt: number;
   if (retry) {
     if (previous === undefined || (previous.result?.status !== "retryable_error" && previous.result?.errorCode !== "SCORE_UNCERTAIN")) throw new GameError("NO_RETRY", "There is no saved answer to retry.", 409);
-    if (now >= round.endsAt + JUDGING_GRACE_MS) throw new GameError("ROUND_CLOSED", "The judging window has closed.", 409);
+    if (now >= round.endsAt) throw new GameError("ROUND_CLOSED", "The judging window has closed.", 409);
     answer = previous.answer;
     receivedAt = previous.receivedAt;
   } else {
@@ -167,9 +166,10 @@ export function finishAnswer(options: { room: Room; roundIndex: number; playerId
   if (round === undefined) return;
   const attempt = round.answers[playerId];
   if (attempt === undefined || attempt.id !== attemptId || attempt.status !== "judging") return;
-  if (room.phase === "playing" && now >= round.endsAt + JUDGING_GRACE_MS) {
+  if (now >= round.endsAt) {
     attempt.status = "done";
-    attempt.result = failure("JUDGE_UNAVAILABLE");
+    attempt.leaseUntil = 0;
+    attempt.result = failure("JUDGING_EXPIRED", false);
     settleRound(room, now);
     return;
   }

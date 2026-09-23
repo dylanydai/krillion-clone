@@ -95,11 +95,16 @@ export default function Game({ code }: { code: string }): ReactNode {
     if (busy !== null) return;
     setBusy(action);
     setError(null);
+    const controller = new AbortController();
+    const deadlineTimer = (action === "answer" || action === "retry") && room?.endsAt !== null && room?.endsAt !== undefined
+      ? setTimeout((): void => controller.abort("round-deadline"), Math.max(0, room.endsAt - Date.now() - offset.current))
+      : undefined;
     try {
-      receive(await api<RoomView>(`/api/rooms/${code}`, { action, ...fields }));
+      receive(await api<RoomView>(`/api/rooms/${code}`, { action, ...fields }, controller.signal));
     } catch (cause: unknown) {
-      setError(cause instanceof Error ? cause.message : "The action failed. Try again.");
+      if (controller.signal.reason !== "round-deadline") setError(cause instanceof Error ? cause.message : "The action failed. Try again.");
     } finally {
+      clearTimeout(deadlineTimer);
       setBusy(null);
     }
   }
@@ -178,7 +183,7 @@ export default function Game({ code }: { code: string }): ReactNode {
       {submitting && own === null && <p className="round-status" role="status">Submitting and judging your answer…</p>}
       {own !== null && <div className="round-status" role="status"><strong>{own.answer || "Skipped"}</strong><span>{attemptLabel(own)}</span>
         {own.result?.status === "scored" && <span>{diving ? `Diving ${dive.roundPoints * METRES_PER_POINT} metres deeper…` : room.phase === "playing" ? "Waiting for the other players." : "Round complete."}</span>}
-        {canRetry && room.phase === "playing" && <button className="secondary" disabled={busy !== null} onClick={(): void => { void act("retry", roundFields); }}>Retry saved answer</button>}
+        {canRetry && room.phase === "playing" && seconds > 0 && <button className="secondary" disabled={busy !== null} onClick={(): void => { void act("retry", roundFields); }}>Retry saved answer</button>}
       </div>}
       {showAnswer && <form className="answer-form" onSubmit={(event: FormEvent<HTMLFormElement>): void => { event.preventDefault(); if (canAnswer) void act("answer", { ...roundFields, answer }); }}>
         <label htmlFor="answer" className="sr-only">Your answer</label><input ref={answerInput} key={room.roundIndex} id="answer" value={answer} onChange={(event): void => setAnswer(event.target.value)} autoComplete="off" maxLength={120} required disabled={busy !== null || !canAnswer} placeholder={countdown > 0 ? "get ready…" : "type one answer…"} />
@@ -186,7 +191,7 @@ export default function Game({ code }: { code: string }): ReactNode {
       </form>}
       {room.phase === "playing" && <div className={`round-time-track${timeRunningOut ? " running-out" : ""}`} role="progressbar" aria-label="Time remaining" aria-valuemin={0} aria-valuemax={ROUND_SECONDS} aria-valuenow={seconds}><span style={{ transform: `scaleX(${room.endsAt === null || room.startsAt === null ? 0 : Math.max(0, Math.min(1, (room.endsAt - now) / (room.endsAt - room.startsAt)))})` }} /></div>}
       {timeRunningOut && <span className="sr-only" role="alert">Less than five seconds remaining.</span>}
-      {room.phase === "playing" && seconds === 0 && <p role="status">Time is up. Finishing submitted answers…</p>}
+      {room.phase === "playing" && seconds === 0 && <p role="status">Time is up. Showing results…</p>}
       </section>
     </FishDive>}
     {room.phase === "lobby" && <section className="panel"><h2>Players</h2>{playerList}</section>}

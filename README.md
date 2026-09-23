@@ -90,7 +90,7 @@ The verifier returns exactly YES or NO. Regional and translated editions do not 
 Only YES reaches Jev for rarity scoring; NO rejects the answer with no score. There is no unresolved verification verdict.
 Both requests use the existing server-side `AI_GATEWAY_API_KEY`. Set `VERIFIER_MODEL` to override the verifier; `JEV_MODEL` still controls rarity scoring.
 Every submission gets a fresh verification request, even if its rarity score already exists in the room. There is no verified-answer cache, local answer catalog, whitelist, or alias table. Adding a category requires a title and prompt, plus an internal ID.
-The prompt hides immediately on submission and stays hidden during judging and after acceptance. Rejected answers can be corrected while time remains. The timer stays visible during judging. Answers received before the deadline may finish judging afterward.
+The prompt hides immediately on submission and stays hidden during judging and after acceptance. Rejected answers can be corrected while time remains. The timer stays visible during judging. The deadline is a hard cutoff: pending answers earn no depth, and late judging responses are ignored.
 
 Verification has a 15-second timeout. Service failures and malformed outputs are retryable errors, not NO verdicts. The model can still make factual mistakes; a binary verdict is not a guarantee of truth.
 
@@ -98,9 +98,8 @@ The scoring rubric has six levels. The server divides Jev's result by five to pr
 The game converts that value to depth with `Math.round(value * 100) * 10` metres.
 Answers matching after Unicode, case, and whitespace normalization receive the same depth within a category. Different aliases are judged independently; there is no automatic canonical-name mapping. The deepest total after seven rounds wins, and ties share the win.
 
-If judging fails, the player can retry the saved answer without changing its original receipt time.
-The round allows up to 60 extra seconds to finish judging.
-After that window, the game reveals the results and leaves unresolved answers unscored.
+If judging fails, the player can retry the saved answer while the round timer is still running.
+At the deadline, the game drops pending answers and reveals results without waiting for the judge.
 
 Rejected answers remain unscored. Players can try another answer while time remains.
 
