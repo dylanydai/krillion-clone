@@ -136,6 +136,17 @@ export default function Game({ code }: { code: string }): ReactNode {
   const canRetry = own?.status === "done" && (own.result?.status === "retryable_error" || own.result?.errorCode === "SCORE_UNCERTAIN");
   const revealed = room.phase === "results" || room.phase === "leaderboard" || room.phase === "finished";
   const hasJudging = room.players.some((player: PublicPlayer): boolean => player.state === "judging");
+  const roundScores = Array.from({ length: room.totalRounds }, (_value: unknown, index: number): number | null => {
+    const completed = room.history[index];
+    if (completed !== undefined) {
+      const result = completed.results.find((entry): boolean => entry.playerId === room.me);
+      if (result === undefined) throw new Error("Round history is missing the current player.");
+      return result.attempt?.result?.score ?? 0;
+    }
+    if (index === room.roundIndex && own?.result?.status === "scored") return own.result.score;
+    if (index === room.roundIndex && own?.skipped) return 0;
+    return null;
+  });
   const leaders = room.players.filter((player: PublicPlayer): boolean => player.points === Math.max(...room.players.map((entry: PublicPlayer): number => entry.points)));
   const sceneKey = diveSceneKey(room.players);
   const diving = settledScene !== sceneKey;
@@ -154,7 +165,7 @@ export default function Game({ code }: { code: string }): ReactNode {
       <div className="actions"><button onClick={(): void => { void copyInvite(); }} className="secondary">{copied ? "Invite copied" : "Copy invite link"}</button>
         {host ? <button disabled={busy !== null} onClick={(): void => { void act("start"); }}>Start game</button> : <p>Waiting for the host to start.</p>}</div>
     </section>}
-    {room.phase !== "lobby" && <FishDive players={room.players} me={room.me} sceneKey={sceneKey} roundIndex={room.roundIndex} totalRounds={room.totalRounds} onArrive={setSettledScene} timeRunningOut={timeRunningOut}>
+    {room.phase !== "lobby" && <FishDive players={room.players} me={room.me} sceneKey={sceneKey} roundIndex={room.roundIndex} totalRounds={room.totalRounds} onArrive={setSettledScene} roundScores={roundScores}>
       <section key={room.roundIndex} className="game-prompt" inert={diving && locked}>
         <div className="prompt-number">Prompt {room.roundIndex + 1} of {room.totalRounds}</div>
         <h1>{room.category?.prompt}</h1>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { diveCameraDepth, VISIBLE_DIVE_METRES } from "../../../lib/dive";
+import { diveCameraDepth, METRES_PER_POINT, VISIBLE_DIVE_METRES } from "../../../lib/dive";
 import type { PublicPlayer } from "../../../lib/types";
 import FishSprite from "../../fish-sprite";
 import OceanScene, { worldPosition } from "../../ocean-scene";
@@ -63,14 +63,14 @@ function useAnimatedDepths(sceneKey: string, onArrive: (key: string) => void): R
   return depths;
 }
 
-export default function FishDive({ players, me, sceneKey, roundIndex, totalRounds, onArrive, timeRunningOut, children }: {
+export default function FishDive({ players, me, sceneKey, roundIndex, totalRounds, onArrive, roundScores, children }: {
   players: PublicPlayer[];
   me: string;
   sceneKey: string;
   roundIndex: number;
   totalRounds: number;
   onArrive: (key: string) => void;
-  timeRunningOut: boolean;
+  roundScores: (number | null)[];
   children: ReactNode;
 }): ReactNode {
   const depths = useAnimatedDepths(sceneKey, onArrive);
@@ -86,9 +86,9 @@ export default function FishDive({ players, me, sceneKey, roundIndex, totalRound
           {player.attempt?.result?.status === "scored" && <span className="dive-answer">“{player.attempt.answer}”</span>}
         </div>)}
     </OceanScene>
-    <header className={`dive-hud${timeRunningOut ? " running-out" : ""}`}>
-      <output className="dive-control depth-control" aria-label={`Depth: ${Math.round(depth)} metres`} aria-live="off"><span>Depth</span><strong>{Math.round(depth).toLocaleString("en-US")} m</strong></output>
-      <div className="hud-progress" aria-label={`Round ${roundIndex + 1} of ${totalRounds}`}><div aria-hidden="true">{Array.from({ length: totalRounds }, (_value: unknown, index: number): ReactNode => <span key={index} className={index <= roundIndex ? "round-dot active" : "round-dot"} />)}</div><span>Round {roundIndex + 1} of {totalRounds}</span></div>
+    <header className="dive-hud">
+      <output className="depth-control hud-panel" aria-label={`Depth: ${Math.round(depth)} metres`} aria-live="off"><span>Depth</span><strong>{Math.round(depth).toLocaleString("en-US")} m</strong></output>
+      <div className="hud-progress hud-panel" aria-label={`Round ${roundIndex + 1} of ${totalRounds}`}><div>{roundScores.map((score: number | null, index: number): ReactNode => <span key={index} className={`round-dot${score !== null ? " completed" : index === roundIndex ? " current" : ""}`} style={score === null ? undefined : { "--round-color": `hsl(${score * 120} 75% 55%)` } as CSSProperties} role="img" aria-label={`Round ${index + 1}: ${score === null ? index === roundIndex ? "in progress" : "upcoming" : `${Math.round(score * 100) * METRES_PER_POINT} metres gained`}`} title={score === null ? index === roundIndex ? "In progress" : "Upcoming" : `${Math.round(score * 100) * METRES_PER_POINT} m gained`} />)}</div><span>Round {roundIndex + 1} of {totalRounds}</span></div>
     </header>
     {children}
     <div className="offscreen-fish" aria-label="Players outside your view">{players.filter((player: PublicPlayer): boolean => player.id !== me && (depths[player.id] < camera || depths[player.id] > camera + VISIBLE_DIVE_METRES * .6)).map((player: PublicPlayer): ReactNode => <div key={player.id}><FishSprite color={player.color} /><span>{player.name} · {Math.round(depths[player.id])} m {depths[player.id] < camera ? "↑" : "↓"}</span></div>)}</div>
