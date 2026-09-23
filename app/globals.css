@@ -64,7 +64,7 @@ input.code { text-align: center; font-size: 30px; padding: 9px 14px; }
 .leaderboard .player-heading strong { flex-shrink: 0; }
 .leaderboard-guess { font-size: 18px; }
 .winner { font-size: 29px; color: var(--pink); }
-.results-popup { width: min(600px, calc(100% - 32px)); max-height: calc(100dvh - 48px); margin: auto; padding: 30px; color: #e8f1ff; overflow-y: auto; }
+.results-popup { border: 0; outline: none; width: min(600px, calc(100% - 32px)); max-height: calc(100dvh - 48px); margin: auto; padding: 30px; color: #e8f1ff; overflow-y: auto; }
 .results-popup::backdrop { background: rgb(3 9 19 / 78%); }
 body:has(.results-popup[open]) { overflow: hidden; }
 .result-fish { display: block; margin-bottom: 16px; }
@@ -143,7 +143,7 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .round-status > span:last-child { color: #a1b7cf; }
 .game-screen .game-alerts { position: absolute; bottom: 160px; left: 50%; width: min(720px, calc(100% - 32px)); transform: translateX(-50%); z-index: 4; }
 .game-alerts:empty { display: none; }
-.result-depth { color: var(--cyan); font: 25px var(--pixel-font); border: 1px solid #355067; padding: 14px; }
+.result-depth { color: var(--cyan); font: 25px var(--pixel-font); padding: 14px; }
 .result-depth span { display: block; color: #a8bfd1; font-size: 19px; margin-top: 4px; }
 @keyframes school-swim { from { transform: translate3d(-180px, 0, 0); } to { transform: translate3d(calc(100vw + 180px), 0, 0); } }
 @keyframes school-bob { 0%, 100% { translate: 0 -3px; } 50% { translate: 0 3px; } }
