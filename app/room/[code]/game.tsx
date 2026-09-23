@@ -130,7 +130,9 @@ export default function Game({ code }: { code: string }): ReactNode {
   const seconds = room.endsAt === null ? 0 : Math.min(ROUND_SECONDS, Math.max(0, Math.ceil((room.endsAt - now) / 1000)));
   const roundFields = { roundIndex: room.roundIndex };
   const locked = own?.result?.status === "scored" || own?.status === "judging" || own?.skipped === true;
-  const showAnswer = room.phase === "playing" && seconds > 0 && !locked;
+  const submitting = busy === "answer" || busy === "retry";
+  const hidePrompt = submitting || locked;
+  const showAnswer = !submitting && room.phase === "playing" && seconds > 0 && !locked;
   const canAnswer = showAnswer && countdown === 0;
   const timeRunningOut = room.phase === "playing" && countdown === 0 && seconds > 0 && room.endsAt !== null && room.endsAt - now < 5000;
   const canRetry = own?.status === "done" && (own.result?.status === "retryable_error" || own.result?.errorCode === "SCORE_UNCERTAIN");
@@ -166,13 +168,14 @@ export default function Game({ code }: { code: string }): ReactNode {
         {host ? <button disabled={busy !== null} onClick={(): void => { void act("start"); }}>Start game</button> : <p>Waiting for the host to start.</p>}</div>
     </section>}
     {room.phase !== "lobby" && <FishDive players={room.players} me={room.me} sceneKey={sceneKey} roundIndex={room.roundIndex} totalRounds={room.totalRounds} onArrive={setSettledScene} roundScores={roundScores}>
-      <section key={room.roundIndex} className="game-prompt" inert={diving && locked}>
+      {!hidePrompt && <section key={room.roundIndex} className="game-prompt">
         <div className="prompt-number">Prompt {room.roundIndex + 1} of {room.totalRounds}</div>
         <h1>{room.category?.prompt}</h1>
         <p className="prompt-hint">Rarer answers sink deeper</p>
-      </section>
+      </section>}
       {countdown > 0 && <div className="round-countdown" role="status"><span>Round starts in</span><strong key={countdown}>{countdown}</strong></div>}
       <section className="answer-dock" aria-label="Round controls">
+      {submitting && own === null && <p className="round-status" role="status">Submitting and judging your answer…</p>}
       {own !== null && <div className="round-status" role="status"><strong>{own.answer || "Skipped"}</strong><span>{attemptLabel(own)}</span>
         {own.result?.status === "scored" && <span>{diving ? `Diving ${dive.roundPoints * METRES_PER_POINT} metres deeper…` : room.phase === "playing" ? "Waiting for the other players." : "Round complete."}</span>}
         {canRetry && room.phase === "playing" && <button className="secondary" disabled={busy !== null} onClick={(): void => { void act("retry", roundFields); }}>Retry saved answer</button>}
