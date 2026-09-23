@@ -58,7 +58,11 @@ input.code { text-align: center; font-size: 30px; padding: 9px 14px; }
 .player-heading strong { font-weight: 400; }
 .player-heading > span { color: var(--cyan); white-space: nowrap; }
 .players .muted { font-size: 14px; }
-.answer-text { font-size: 18px; margin: 12px 0 4px; }
+.leaderboard { overflow-x: auto; }
+.leaderboard > li { padding: 8px 0; border-top: 0; }
+.leaderboard .player-heading { min-width: 100%; width: max-content; gap: 24px; white-space: nowrap; }
+.leaderboard .player-heading strong { flex-shrink: 0; }
+.leaderboard-guess { font-size: 18px; }
 .winner { font-size: 29px; color: var(--pink); }
 .results-popup { width: min(600px, calc(100% - 32px)); max-height: calc(100dvh - 48px); margin: auto; padding: 30px; color: #e8f1ff; overflow-y: auto; }
 .results-popup::backdrop { background: rgb(3 9 19 / 78%); }

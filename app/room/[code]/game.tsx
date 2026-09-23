@@ -139,7 +139,7 @@ export default function Game({ code }: { code: string }): ReactNode {
   const leaders = room.players.filter((player: PublicPlayer): boolean => player.points === Math.max(...room.players.map((entry: PublicPlayer): number => entry.points)));
   const sceneKey = diveSceneKey(room.players);
   const diving = settledScene !== sceneKey;
-  const playerList = <ul className="players">{[...room.players].sort((a: PublicPlayer, b: PublicPlayer): number => b.depth - a.depth).map((player: PublicPlayer): ReactNode => <li key={player.id}>
+  const playerList = <ul className="players leaderboard">{[...room.players].sort((a: PublicPlayer, b: PublicPlayer): number => b.depth - a.depth).map((player: PublicPlayer): ReactNode => <li key={player.id}>
     <div className="player-heading"><strong><FishSprite color={player.color} />{player.name}{player.id === room.me ? " (you)" : ""}{player.id === room.hostId ? " · host" : ""}</strong></div>
   </li>)}</ul>;
 
@@ -184,16 +184,15 @@ export default function Game({ code }: { code: string }): ReactNode {
         <p className="round-prompt">{room.category?.prompt}</p>
         <p className="result-depth">Your depth: {(dive.totalPoints * METRES_PER_POINT).toLocaleString("en-US")} m <span>+{dive.roundPoints * METRES_PER_POINT} m this round</span></p>
         <p className="muted">Depth gained this round</p>
-        <ul className="players">{[...room.players].sort((a: PublicPlayer, b: PublicPlayer): number => (roundPoints(b) ?? -1) - (roundPoints(a) ?? -1)).map((player: PublicPlayer): ReactNode => <li key={player.id}>
-          <div className="player-heading"><strong><FishSprite color={player.color} />{player.name}{player.id === room.me ? " (you)" : ""}</strong><span>{roundPoints(player) === null ? "—" : `+${player.depth - player.previousDepth} m`}</span></div>
-          <p className="answer-text">{player.attempt?.answer || (player.attempt?.skipped ? "Skipped" : "No answer")}</p>
+        <ul className="players leaderboard">{[...room.players].sort((a: PublicPlayer, b: PublicPlayer): number => (roundPoints(b) ?? -1) - (roundPoints(a) ?? -1)).map((player: PublicPlayer): ReactNode => <li key={player.id}>
+          <div className="player-heading"><strong><FishSprite color={player.color} />{player.name}{player.id === room.me ? " (you)" : ""}<span className="leaderboard-guess"> - {player.attempt?.answer || (player.attempt?.skipped ? "Skipped" : "No answer")}</span></strong><span>{roundPoints(player) === null ? "—" : `+${player.depth - player.previousDepth} m`}</span></div>
           {player.attempt !== null && !player.attempt.skipped && player.attempt.result?.score === null && <p className="muted">{attemptLabel(player.attempt)}</p>}
         </li>)}</ul>
       </> : <>
         <p>Total depth after {room.roundIndex + 1} {room.roundIndex === 0 ? "round" : "rounds"}</p>
         {room.phase === "finished" && <p className="winner">{leaders.map((player: PublicPlayer): string => player.name).join(" & ")} {leaders.length > 1 ? "tie for first" : "wins"}!</p>}
-        <ul className="players">{[...room.players].sort((a: PublicPlayer, b: PublicPlayer): number => b.points - a.points).map((player: PublicPlayer): ReactNode => <li key={player.id}>
-          <div className="player-heading"><strong><FishSprite color={player.color} />{player.name}{player.id === room.me ? " (you)" : ""}</strong><span>{player.depth} m</span></div>
+        <ul className="players leaderboard">{[...room.players].sort((a: PublicPlayer, b: PublicPlayer): number => b.points - a.points).map((player: PublicPlayer): ReactNode => <li key={player.id}>
+          <div className="player-heading"><strong><FishSprite color={player.color} />{player.name}{player.id === room.me ? " (you)" : ""}<span className="leaderboard-guess"> - {player.attempt?.answer || (player.attempt?.skipped ? "Skipped" : "No answer")}</span></strong><span>{player.depth} m</span></div>
         </li>)}</ul>
       </>}
       {connectionError !== null && <p className="error" role="alert">Connection issue: {connectionError} Reconnecting…</p>}
