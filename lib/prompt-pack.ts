@@ -65,11 +65,6 @@ export const ADDITIONAL_CATEGORIES = [
     prompt: "Name a pasta shape",
   },
   {
-    id: "architectural-features",
-    title: "Architectural features",
-    prompt: "Name an architectural feature",
-  },
-  {
     id: "cloud-types",
     title: "Cloud types",
     prompt: "Name a type of cloud",
@@ -118,6 +113,201 @@ export const ADDITIONAL_CATEGORIES = [
     id: "islands",
     title: "Islands",
     prompt: "Name an island",
+  },
+  {
+    id: "capital-cities",
+    title: "Capital cities",
+    prompt: "Name a capital city",
+  },
+  {
+    id: "flowers",
+    title: "Flowers",
+    prompt: "Name a flower",
+  },
+  {
+    id: "ice-cream-flavors",
+    title: "Ice cream flavors",
+    prompt: "Name an ice cream flavor",
+  },
+  {
+    id: "jewish-foods",
+    title: "Jewish foods",
+    prompt: "Name a Jewish food",
+  },
+  {
+    id: "college-majors",
+    title: "College majors",
+    prompt: "Name a college major",
+  },
+  {
+    id: "holidays",
+    title: "Holidays",
+    prompt: "Name a holiday",
+  },
+  {
+    id: "music-genres",
+    title: "Genres of music",
+    prompt: "Name a genre of music",
+  },
+  {
+    id: "candy-types",
+    title: "Types of candy",
+    prompt: "Name a type of candy",
+  },
+  {
+    id: "transit",
+    title: "Forms of transit",
+    prompt: "Name a form of transit",
+  },
+  {
+    id: "body-parts",
+    title: "Body parts",
+    prompt: "Name a part of the human body",
+  },
+  {
+    id: "crimes",
+    title: "Crimes",
+    prompt: "Name a crime",
+  },
+  {
+    id: "office-supplies",
+    title: "Office supplies",
+    prompt: "Name an office supply",
+  },
+  {
+    id: "game-shows",
+    title: "Game shows",
+    prompt: "Name a game show",
+  },
+  {
+    id: "world-cuisine",
+    title: "World cuisine",
+    prompt: "Name a cuisine from around the world",
+  },
+  {
+    id: "breakfast-foods",
+    title: "Breakfast foods",
+    prompt: "Name a breakfast food",
+  },
+  {
+    id: "clothing-items",
+    title: "Clothing items",
+    prompt: "Name an item of clothing",
+  },
+  {
+    id: "hospital-tools",
+    title: "Tools used in a hospital",
+    prompt: "Name a tool used in a hospital",
+  },
+  {
+    id: "train-station-items",
+    title: "Things you find at a train station",
+    prompt: "Name something you find at a train station",
+  },
+  {
+    id: "machine-learning-concepts",
+    title: "Machine learning concepts",
+    prompt: "Name a machine learning concept",
+  },
+  {
+    id: "kitchen-utensils",
+    title: "Kitchen utensils",
+    prompt: "Name a kitchen utensil",
+  },
+  {
+    id: "herbs-and-spices",
+    title: "Culinary herbs and spices",
+    prompt: "Name a culinary herb or spice",
+  },
+  {
+    id: "breads",
+    title: "Types of bread",
+    prompt: "Name a type of bread",
+  },
+  {
+    id: "soups",
+    title: "Types of soup",
+    prompt: "Name a type of soup",
+  },
+  {
+    id: "sauces-and-condiments",
+    title: "Sauces and condiments",
+    prompt: "Name a sauce or condiment",
+  },
+  {
+    id: "teas",
+    title: "Types of tea",
+    prompt: "Name a type of tea",
+  },
+  {
+    id: "dog-breeds",
+    title: "Dog breeds",
+    prompt: "Name a dog breed",
+  },
+  {
+    id: "cat-breeds",
+    title: "Cat breeds",
+    prompt: "Name a cat breed",
+  },
+  {
+    id: "trees",
+    title: "Types of trees",
+    prompt: "Name a type of tree",
+  },
+  {
+    id: "car-parts",
+    title: "Car parts",
+    prompt: "Name a car part",
+  },
+  {
+    id: "hand-tools",
+    title: "Hand tools",
+    prompt: "Name a hand tool",
+  },
+  {
+    id: "standard-deck-card-games",
+    title: "Card games played with a standard deck",
+    prompt: "Name a card game played with a standard deck",
+  },
+  {
+    id: "dance-styles",
+    title: "Dance styles",
+    prompt: "Name a style of dance",
+  },
+  {
+    id: "martial-arts",
+    title: "Martial arts",
+    prompt: "Name a martial art",
+  },
+  {
+    id: "track-and-field-events",
+    title: "Track and field events",
+    prompt: "Name a track and field event",
+  },
+  {
+    id: "computer-parts",
+    title: "Computer parts",
+    prompt: "Name a computer part",
+  },
+  {
+    id: "web-browsers",
+    title: "Web browsers",
+    prompt: "Name a web browser",
+  },
+  {
+    id: "video-game-consoles",
+    title: "Video game consoles",
+    prompt: "Name a video game console",
+  },
+  {
+    id: "video-game-genres",
+    title: "Video game genres",
+    prompt: "Name a video game genre",
+  },
+  {
+    id: "electronic-components",
+    title: "Electronic components",
+    prompt: "Name an electronic component",
   },
 ] as const;
 

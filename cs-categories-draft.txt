@@ -1,0 +1,20 @@
+Programming paradigms
+Programming language features
+Compiler optimizations
+Concurrency primitives
+Software testing techniques
+Graph theory concepts
+HTTP status codes
+HTML elements
+CSS pseudo-classes
+SQL keywords
+Git commands
+Package managers
+Build tools
+Web frameworks
+Game engines
+File systems
+Software licenses
+Text encodings
+CPU instruction set architectures
+Command-line shells
