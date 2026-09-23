@@ -211,13 +211,25 @@ export default function Game({ code }: { code: string }): ReactNode {
         <p>Total depth after {room.roundIndex + 1} {room.roundIndex === 0 ? "round" : "rounds"}</p>
         {room.phase === "finished" && <p className="winner">{leaders.map((player: PublicPlayer): string => player.name).join(" & ")} {leaders.length > 1 ? "tie for first" : "wins"}!</p>}
         <ul className="players leaderboard">{[...room.players].sort((a: PublicPlayer, b: PublicPlayer): number => b.points - a.points).map((player: PublicPlayer): ReactNode => <li key={player.id}>
-          <div className="player-heading"><strong><FishSprite color={player.color} />{player.name}{player.id === room.me ? " (you)" : ""}<span className="leaderboard-guess"> - {player.attempt?.answer || (player.attempt?.skipped ? "Skipped" : "No answer")}</span></strong><span>{player.depth} m</span></div>
+          <div className="player-heading"><strong><FishSprite color={player.color} />{player.name}{player.id === room.me ? " (you)" : ""}{room.phase !== "finished" && <span className="leaderboard-guess"> - {player.attempt?.answer || (player.attempt?.skipped ? "Skipped" : "No answer")}</span>}</strong><span>{player.depth} m</span></div>
         </li>)}</ul>
       </>}
       {connectionError !== null && <p className="error" role="alert">Connection issue: {connectionError} Reconnecting…</p>}
       {error !== null && <p className="error" role="alert">{error}</p>}
       {host ? <button disabled={busy !== null || hasJudging} onClick={(): void => { void act(room.phase === "finished" ? "rematch" : "next"); }}>{room.phase === "results" ? "Next" : room.phase === "finished" ? "Open rematch lobby" : "Start next round"}</button> : <p role="status">Waiting for the host to {room.phase === "results" ? "show the leaderboard" : room.phase === "finished" ? "open a rematch" : "start the next round"}.</p>}
-      {room.phase === "finished" && <details className="answer-history"><summary>All answers</summary>{room.history.map((round): ReactNode => <div key={round.category.id}><h3>{round.category.title}</h3><ul>{round.results.map((result): ReactNode => <li key={result.playerId}>{room.players.find((player: PublicPlayer): boolean => player.id === result.playerId)?.name}: {result.attempt?.answer || "No answer"} — {attemptLabel(result.attempt)}</li>)}</ul></div>)}</details>}
+      {room.phase === "finished" && <section className="answer-history" aria-label="Your answers"><h3>Your answers</h3>{room.history.map((round, index: number): ReactNode => {
+        const result = round.results.find((entry): boolean => entry.playerId === room.me);
+        if (result === undefined) throw new Error("Round history is missing your answer.");
+        const attempt = result.attempt;
+        const score = attempt?.result?.score;
+        return <div key={round.category.id}>
+          <p className="round-prompt">Round {index + 1}: {round.category.prompt}</p>
+          <ul className="players leaderboard"><li>
+            <div className="player-heading"><strong><FishSprite color={me.color} />{me.name} (you)<span className="leaderboard-guess"> - {attempt?.answer || (attempt?.skipped ? "Skipped" : "No answer")}</span></strong><span>{score === null || score === undefined ? "—" : `+${Math.round(score * 100) * METRES_PER_POINT} m`}</span></div>
+            {attempt !== null && !attempt.skipped && attempt.result?.score === null && <p className="muted">{attemptLabel(attempt)}</p>}
+          </li></ul>
+        </div>;
+      })}</section>}
       </div>
     </ResultsPopup>}
   </div>;
