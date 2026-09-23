@@ -5,7 +5,6 @@ import type { FormEvent, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "../lib/client";
 import type { RoomView } from "../lib/types";
-import { ROUNDS_PER_GAME, ROUND_SECONDS } from "../lib/game-config";
 
 export default function Home(): ReactNode {
   const router = useRouter();
@@ -33,8 +32,6 @@ export default function Home(): ReactNode {
   return <div className="home-screen">
     <header className="brand"><span className="brand-fish" aria-hidden="true" /><h1>Krillion <span>Clone</span></h1></header>
     <section className="panel home-panel">
-      <h2>Play with friends</h2>
-      <p>{ROUNDS_PER_GAME} random prompts, {ROUND_SECONDS} seconds each. Share a room link to invite your friends.</p>
       <form onSubmit={enter}>
         <label htmlFor="name">Your name</label>
         <input id="name" name="name" value={name} onChange={(event): void => setName(event.target.value)} required maxLength={24} autoComplete="nickname" />
