@@ -2,14 +2,18 @@ import type { CSSProperties, ReactNode } from "react";
 import { METRES_PER_POINT, VISIBLE_DIVE_METRES } from "../lib/dive";
 
 const TICK_METRES = 100;
+const DARKNESS_START_METRES = 600;
+const DARKNESS_FULL_METRES = 2400;
 
 export function worldPosition(metres: number): string {
   return `calc(var(--surface-height) + ${metres / VISIBLE_DIVE_METRES * 100}dvh)`;
 }
 
-export default function OceanScene({ totalRounds, camera = 0, className = "", children }: { totalRounds: number; camera?: number; className?: string; children?: ReactNode }): ReactNode {
+export default function OceanScene({ totalRounds, camera = 0, className = "", light, children }: { totalRounds: number; camera?: number; className?: string; light?: { depth: number; left: number }; children?: ReactNode }): ReactNode {
   const maxDepth = totalRounds * 100 * METRES_PER_POINT + VISIBLE_DIVE_METRES;
   const style = { "--world-height": worldPosition(maxDepth), "--camera-pan": `${-camera / VISIBLE_DIVE_METRES * 100}dvh` } as CSSProperties;
+
+  const darkness = light === undefined ? 0 : Math.max(0, Math.min(1, (light.depth - DARKNESS_START_METRES) / (DARKNESS_FULL_METRES - DARKNESS_START_METRES)));
 
   return <div className={`dive-scene ${className}`} style={style} aria-hidden="true">
     <div className="dive-world">
@@ -22,5 +26,6 @@ export default function OceanScene({ totalRounds, camera = 0, className = "", ch
       {children}
       <div className="ocean-ruler">{Array.from({ length: maxDepth / TICK_METRES + 1 }, (_value: unknown, index: number): ReactNode => <div key={index} className="ocean-depth-mark" style={{ top: worldPosition(index * TICK_METRES) }}><span>{index === 0 ? "0 m" : `−${(index * TICK_METRES).toLocaleString("en-US")} m`}</span></div>)}</div>
     </div>
+    {light !== undefined && <div className="ocean-darkness" style={{ opacity: darkness, "--light-x": `${light.left}%`, "--light-y": worldPosition(light.depth - camera) } as CSSProperties} />}
   </div>;
 }

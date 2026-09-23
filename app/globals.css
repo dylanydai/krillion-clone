@@ -88,9 +88,10 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .cloud-left { left: 5%; top: 15%; }
 .cloud-right { right: 10%; top: 3%; transform: scale(.8); }
 .ocean-boat { position: absolute; left: 25%; top: calc(var(--surface-height) - 132px); width: 200px; height: 140px; background: url("/fishing-boat.svg") center / contain no-repeat; image-rendering: pixelated; }
-.ocean-water { position: absolute; top: var(--surface-height); bottom: 0; left: 0; right: 0; overflow: hidden; background: linear-gradient(#315d82 0%, #224966 20%, #112b46 45%, #09182b 70%, #030a16 100%); }
-.ocean-surface { position: absolute; left: 0; right: 0; top: calc(var(--surface-height) - 9px); height: 20px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='20'%3E%3Cpath d='M0 7 Q125 17 250 8 T500 8 T750 8 T1000 8 V20 H0Z' fill='%23315d82'/%3E%3Cpath d='M0 7 Q125 17 250 8 T500 8 T750 8 T1000 8' fill='none' stroke='%2374a9bb' stroke-opacity='.5'/%3E%3C/svg%3E") repeat-x; }
-.ocean-rays { position: absolute; inset: 0 0 auto; height: 140dvh; background: repeating-linear-gradient(105deg, transparent 0 12%, #95d4e508 13% 16%, transparent 17% 28%); mask-image: linear-gradient(#000, transparent); }
+.ocean-water { position: absolute; top: var(--surface-height); bottom: 0; left: 0; right: 0; overflow: hidden; background: linear-gradient(#a2d5df 0, #78b5cc 60dvh, #487f9e 160dvh, #0c3d60 300dvh, #071d36 480dvh, #020813 800dvh); }
+.ocean-surface { position: absolute; left: 0; right: 0; top: calc(var(--surface-height) - 9px); height: 20px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='20'%3E%3Cpath d='M0 7 Q125 17 250 8 T500 8 T750 8 T1000 8 V20 H0Z' fill='%23a2d5df'/%3E%3Cpath d='M0 7 Q125 17 250 8 T500 8 T750 8 T1000 8' fill='none' stroke='%23ccffff' stroke-opacity='.85'/%3E%3C/svg%3E") repeat-x; }
+.ocean-rays { position: absolute; inset: 0 0 auto; height: 220dvh; background: repeating-linear-gradient(105deg, transparent 0 10%, #d9ffff42 12% 15%, #d9ffff12 17%, transparent 20% 28%); mask-image: linear-gradient(#000 0%, #0009 35%, transparent 100%); }
+.ocean-darkness { position: absolute; inset: 0; background: radial-gradient(circle at var(--light-x) var(--light-y), transparent 42px, #01050d38 90px, #01050dbd 190px, #01050df5 340px); }
 .ocean-particle { position: absolute; width: var(--particle-size); height: var(--particle-size); background: #c5edfa; opacity: .35; animation: pixel-drift var(--particle-duration) var(--particle-delay) linear infinite; }
 .ocean-school { position: absolute; left: 0; display: flex; gap: 30px; opacity: .75; animation: school-swim var(--swim-duration) var(--swim-delay) linear infinite; will-change: transform; }
 .ocean-school.swim-left { animation-direction: reverse; }
@@ -125,14 +126,13 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .is-diving .game-prompt { opacity: 0; translate: 0 -12px; pointer-events: none; }
 .answer-dock { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 22px max(18px, env(safe-area-inset-bottom)); background: linear-gradient(transparent, #050d19e8 30%, #050d19); z-index: 3; text-align: center; }
 .answer-form { display: grid; grid-template-columns: minmax(0, 1fr) 100px; align-items: center; gap: 8px 12px; max-width: 660px; margin: auto; }
-.answer-form input { height: 62px; font: 28px var(--pixel-font); border-color: #73bfce; background: #0b192cdd; }
+.answer-form input { height: 62px; font: 26px/1 var(--pixel-font); letter-spacing: 1px; border-color: #73bfce; background: #0b192cdd; }
 .answer-form input:focus-visible { outline: none; }
 .answer-form input:disabled { background: #28303a; border-color: #626b78; color: #949ba7; box-shadow: inset 3px 3px #1c232c; cursor: not-allowed; }
 .answer-form input:disabled::placeholder { color: #949ba7; }
-.round-countdown { position: absolute; top: 52%; left: 50%; transform: translate(-50%, -50%); z-index: 3; display: grid; gap: 8px; text-align: center; color: var(--cyan); pointer-events: none; text-shadow: 0 2px #071221, 0 0 24px #80dfeb66; }
-.round-countdown > span { font-size: 22px; text-transform: uppercase; letter-spacing: 2px; }
-.round-countdown > strong { font: 96px/1 var(--pixel-font); animation: countdown-in .4s ease both; }
-.dive-control { display: grid; place-content: center; height: 62px; padding: 8px; border: 2px solid #060e1b; border-radius: 0; background: var(--pink); color: #161329; font: 23px/1 var(--pixel-font); letter-spacing: 2px; text-transform: uppercase; box-shadow: inset 0 2px 0 #ffc0d5, inset 0 -3px 0 #c94f7a, 3px 3px 0 #060d1b; }
+.round-countdown { width: fit-content; max-width: 100%; margin: 0 auto; padding: 16px 22px; background: #0c142ade; clip-path: var(--pixel-box); color: #91a7be; font: clamp(16px, 3.5vw, 22px)/1.4 var(--pixel-font); letter-spacing: clamp(1px, .4vw, 4px); text-align: center; }
+.round-countdown > strong { color: var(--cyan); font-weight: 400; white-space: nowrap; }
+.dive-control { display: grid; place-content: center; height: 62px; padding: 8px; border: 2px solid #060e1b; border-radius: 0; background: var(--pink); color: #161329; font: 23px/1 var(--pixel-font); letter-spacing: 1px; text-transform: uppercase; box-shadow: inset 0 2px 0 #ffc0d5, inset 0 -3px 0 #c94f7a, 3px 3px 0 #060d1b; }
 .depth-control { display: grid; place-content: center; height: 62px; width: 100px; padding: 8px; flex-shrink: 0; color: #c1d7e8; font: 23px/1 var(--pixel-font); letter-spacing: 2px; text-align: center; text-transform: uppercase; }
 .depth-control > span { font-size: 15px; margin-bottom: 4px; }
 .depth-control > strong { font-size: 25px; font-weight: 400; letter-spacing: 0; white-space: nowrap; }
@@ -171,7 +171,7 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .player-heading strong { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .player-heading strong .fish-sprite { width: 26px; }
 .dive-answer { display: block; margin: 10px -35px 0; padding: 10px; background: #0c142ade; color: var(--fish-color); font-size: 26px; overflow-wrap: anywhere; text-shadow: 0 0 14px currentColor; animation: surface-in .5s ease both; }
-.own-diver::before { content: ""; position: absolute; inset: -90px -65px; z-index: -1; background: radial-gradient(ellipse, color-mix(in srgb, var(--fish-color) 15%, transparent), transparent 70%); }
+.own-diver::before { content: ""; position: absolute; width: 240px; height: 240px; left: 50%; top: 20px; transform: translate(-50%, -50%); z-index: -1; background: radial-gradient(circle, #b5f8ff26, color-mix(in srgb, var(--fish-color) 22%, transparent) 25%, transparent 65%); }
 .offscreen-fish { position: absolute; top: 150px; left: 18px; display: flex; flex-direction: column; gap: 8px; max-width: 40%; max-height: 25dvh; overflow-y: auto; pointer-events: none; z-index: 2; }
 .offscreen-fish > div { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: #09172bd9; font-size: 18px; animation: surface-in .4s ease both; }
 .offscreen-fish .fish-sprite { width: 24px; }
@@ -193,7 +193,6 @@ input:focus { border-color: var(--cyan); box-shadow: inset 3px 3px #040b15, 0 0 
 @keyframes rays-drift { from { transform: translateX(-2%); opacity: .65; } to { transform: translateX(2%); opacity: 1; } }
 @keyframes waves-drift { to { background-position-x: 1000px; } }
 @keyframes time-warning { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-@keyframes countdown-in { from { opacity: 0; transform: scale(1.2); } to { opacity: 1; transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 @media (max-width: 600px) { main { padding: 28px 18px 48px; } .panel, .results-popup { padding: 22px; } .brand { margin-bottom: 26px; } .brand h1 { font-size: 66px; } .home-panel > p { font-size: 14px; } .actions button { flex: 1 1 150px; } .room-header { flex-wrap: wrap; } }
 @media (max-width: 360px) { main { padding-inline: 12px; } .panel, .results-popup { padding: 18px; } .brand h1 { font-size: 56px; } button { font-size: 21px; padding-inline: 12px; } }

@@ -79,7 +79,7 @@ export default function FishDive({ players, me, sceneKey, roundIndex, totalRound
   const descending = players.some((player: PublicPlayer): boolean => Math.abs(player.depth - depths[player.id]) > 0.5);
 
   return <>
-    <OceanScene totalRounds={totalRounds} camera={camera} className={descending ? "is-descending" : ""}>
+    <OceanScene totalRounds={totalRounds} camera={camera} light={{ depth, left: 12 + (players.findIndex((player: PublicPlayer): boolean => player.id === me) + 1) / (players.length + 1) * 68 }} className={descending ? "is-descending" : ""}>
         {players.map((player: PublicPlayer, index: number): ReactNode => <div key={player.id} className={`ocean-diver${player.id === me ? " own-diver" : ""}${Math.abs(player.depth - depths[player.id]) > .5 ? " is-swimming" : ""}`} style={{ translate: `0 ${worldPosition(depths[player.id])}`, left: `${12 + (index + 1) / (players.length + 1) * 68}%`, "--fish-color": player.color } as CSSProperties}>
           <div className="dive-fish"><span className="dive-bubble bubble-one" /><span className="dive-bubble bubble-two" /><span className="dive-bubble bubble-three" /><FishSprite color={player.color} /></div>
           <span className="dive-fish-label">{player.name}{player.id === me ? " (you)" : ""} · {Math.round(depths[player.id])} m</span>
