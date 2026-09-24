@@ -309,6 +309,46 @@ export const ADDITIONAL_CATEGORIES = [
     title: "Electronic components",
     prompt: "Name an electronic component",
   },
+  {
+    id: "compiler-optimizations",
+    title: "Compiler optimizations",
+    prompt: "Name a compiler optimization",
+  },
+  {
+    id: "graph-theory-concepts",
+    title: "Graph theory concepts",
+    prompt: "Name a graph theory concept",
+  },
+  {
+    id: "git-commands",
+    title: "Git commands",
+    prompt: "Name a Git command",
+  },
+  {
+    id: "python-libraries",
+    title: "Python libraries",
+    prompt: "Name a Python library",
+  },
+  {
+    id: "build-tools",
+    title: "Build tools",
+    prompt: "Name a software build tool",
+  },
+  {
+    id: "web-frameworks",
+    title: "Web frameworks",
+    prompt: "Name a web framework",
+  },
+  {
+    id: "command-line-shells",
+    title: "Command-line shells",
+    prompt: "Name a command-line shell",
+  },
+  {
+    id: "llms",
+    title: "LLMs",
+    prompt: "Name a large language model",
+  },
 ] as const;
 
 export type AdditionalCategoryId = typeof ADDITIONAL_CATEGORIES[number]["id"];

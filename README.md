@@ -2,7 +2,7 @@
 
 A minimal multiplayer category game built with Next.js for Vercel.
 Players submit real items and dive deeper with uncommon answers.
-Each match draws seven different prompts from a pool of 64 categories, including computer science, maths, games, food, nature, and the arts.
+Each match draws seven different prompts from a pool of 72 categories, including computer science, maths, games, food, nature, and the arts.
 
 ## Play locally
 
