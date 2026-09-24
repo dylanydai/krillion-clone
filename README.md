@@ -2,7 +2,7 @@
 
 A minimal multiplayer category game built with Next.js for Vercel.
 Players submit real items and dive deeper with uncommon answers.
-Each match draws seven different prompts from a pool of 72 categories, including computer science, maths, games, food, nature, and the arts.
+Each match draws seven different prompts from a pool of 462 categories, including computer science, maths, psychology, games, food, nature, and the arts.
 
 ## Play locally
 
@@ -122,6 +122,8 @@ The test runner enforces process timeouts.
 - `app/api/rooms/`: Server routes and player cookies.
 - `lib/game.ts`: Game rules and player-specific room views.
 - `lib/prompt-pack.ts`: Additional category titles and prompts.
+- `lib/archive-categories.ts`: Individual archived Daily Dive prompts, excluding equivalent existing categories.
+- `krillion-archive-questions.json`: Source dates, question numbers, and URLs for the imported archive. The September 21 source omits question 5.
 - `lib/judge.ts`: Concurrent Jev relevance checking, rarity scoring, and failure messages.
 - `lib/store.ts`: Shared Redis storage and explicit local memory storage.
 - `WORKFLOW_PLAN.md`: The original workflow design.

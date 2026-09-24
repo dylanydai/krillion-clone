@@ -1,5 +1,6 @@
 import type { Category, CategoryId } from "./types.ts";
 
+import { ARCHIVE_CATEGORIES } from "./archive-categories.ts";
 import { ADDITIONAL_CATEGORIES } from "./prompt-pack.ts";
 
 export const CATEGORIES: Category[] = [
@@ -14,6 +15,7 @@ export const CATEGORIES: Category[] = [
     prompt: "Name a quantitative trading firm",
   },
   ...ADDITIONAL_CATEGORIES,
+  ...ARCHIVE_CATEGORIES,
 ];
 
 const CS_QUANT_CATEGORIES = new Set<CategoryId>([
@@ -22,6 +24,7 @@ const CS_QUANT_CATEGORIES = new Set<CategoryId>([
   "machine-learning-concepts", "computer-parts", "web-browsers", "electronic-components",
   "compiler-optimizations", "graph-theory-concepts", "git-commands", "python-libraries",
   "build-tools", "web-frameworks", "command-line-shells", "llms",
+  "archive-2026-08-16-7", "archive-2026-08-23-5", "archive-2026-08-24-2", "archive-2026-09-22-4", "archive-2026-09-22-5",
 ]);
 
 export function categoriesForMode(girlfriendFriendly: boolean): Category[] {

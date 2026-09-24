@@ -1,8 +1,9 @@
 import type { FishColor } from "./fish.ts";
 
+import type { ArchiveCategoryId } from "./archive-categories.ts";
 import type { AdditionalCategoryId } from "./prompt-pack.ts";
 
-export type CategoryId = "languages" | "firms" | AdditionalCategoryId;
+export type CategoryId = "languages" | "firms" | AdditionalCategoryId | ArchiveCategoryId;
 
 export type Category = {
   id: CategoryId;
