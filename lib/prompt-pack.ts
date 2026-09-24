@@ -349,6 +349,106 @@ export const ADDITIONAL_CATEGORIES = [
     title: "LLMs",
     prompt: "Name a large language model",
   },
+  {
+    id: "neurological-diseases",
+    title: "Neurological diseases",
+    prompt: "Name a neurological disease",
+  },
+  {
+    id: "psychological-disorders",
+    title: "Psychological disorders",
+    prompt: "Name a psychological disorder",
+  },
+  {
+    id: "cognitive-biases",
+    title: "Cognitive biases",
+    prompt: "Name a cognitive bias",
+  },
+  {
+    id: "phobias",
+    title: "Phobias",
+    prompt: "Name a phobia",
+  },
+  {
+    id: "defense-mechanisms",
+    title: "Defense mechanisms",
+    prompt: "Name a defense mechanism",
+  },
+  {
+    id: "psychotherapies",
+    title: "Types of psychotherapy",
+    prompt: "Name a type of psychotherapy",
+  },
+  {
+    id: "psychological-theories",
+    title: "Psychological theories",
+    prompt: "Name a psychological theory",
+  },
+  {
+    id: "psychological-experiments",
+    title: "Psychological experiments",
+    prompt: "Name a psychological experiment",
+  },
+  {
+    id: "psychologists",
+    title: "Psychologists",
+    prompt: "Name a psychologist",
+  },
+  {
+    id: "brain-regions",
+    title: "Brain regions",
+    prompt: "Name a brain region",
+  },
+  {
+    id: "neurotransmitters",
+    title: "Neurotransmitters",
+    prompt: "Name a neurotransmitter",
+  },
+  {
+    id: "memory-types",
+    title: "Types of memory",
+    prompt: "Name a type of memory",
+  },
+  {
+    id: "sleep-disorders",
+    title: "Sleep disorders",
+    prompt: "Name a sleep disorder",
+  },
+  {
+    id: "perceptual-illusions",
+    title: "Perceptual illusions",
+    prompt: "Name a perceptual illusion",
+  },
+  {
+    id: "personality-traits",
+    title: "Personality traits",
+    prompt: "Name a personality trait",
+  },
+  {
+    id: "psychological-assessments",
+    title: "Psychological assessments",
+    prompt: "Name a psychological assessment",
+  },
+  {
+    id: "learning-phenomena",
+    title: "Learning phenomena",
+    prompt: "Name a learning phenomenon",
+  },
+  {
+    id: "psychological-symptoms",
+    title: "Symptoms of psychological disorders",
+    prompt: "Name a symptom of a psychological disorder",
+  },
+  {
+    id: "psychology-branches",
+    title: "Branches of psychology",
+    prompt: "Name a branch of psychology",
+  },
+  {
+    id: "social-psychology-concepts",
+    title: "Social psychology concepts",
+    prompt: "Name a concept from social psychology",
+  },
 ] as const;
 
 export type AdditionalCategoryId = typeof ADDITIONAL_CATEGORIES[number]["id"];
