@@ -2,8 +2,8 @@ import type { CSSProperties, ReactNode } from "react";
 import { METRES_PER_POINT, VISIBLE_DIVE_METRES } from "../lib/dive";
 
 const TICK_METRES = 100;
-const DARKNESS_START_METRES = 600;
-const DARKNESS_FULL_METRES = 2400;
+const DARKNESS_START_METRES = 3000;
+const DARKNESS_FULL_METRES = 6000;
 
 export function worldPosition(metres: number): string {
   return `calc(var(--surface-height) + ${metres / VISIBLE_DIVE_METRES * 100}dvh)`;

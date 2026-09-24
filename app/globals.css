@@ -65,7 +65,7 @@ input.code { text-align: center; font-size: 30px; padding: 9px 14px; }
 .leaderboard-guess { font-size: 18px; }
 .winner { font-size: 29px; color: var(--pink); }
 .results-popup { border: 0; outline: none; width: min(600px, calc(100% - 32px)); max-height: calc(100dvh - 48px); margin: auto; padding: 30px; color: #e8f1ff; overflow-y: auto; }
-.results-popup::backdrop { background: rgb(3 9 19 / 78%); }
+.results-popup::backdrop { background: transparent; }
 body:has(.results-popup[open]) { overflow: hidden; }
 .result-fish { display: block; margin-bottom: 16px; }
 .results-popup h2 { font-size: 34px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; }
@@ -80,6 +80,7 @@ body:has(.game-screen) { overflow: hidden; }
 body:has(.game-screen) main { max-width: none; padding: 0; }
 body:has(.game-screen) > .menu-ocean { display: none; }
 .game-screen { position: fixed; inset: 0; height: 100dvh; overflow: hidden; isolation: isolate; }
+.game-screen::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 150px; background: linear-gradient(transparent, #050d19e8 30%, #050d19); z-index: 2; pointer-events: none; }
 .dive-scene { position: absolute; inset: 0; overflow: hidden; z-index: -1; background: #17334d; pointer-events: none; }
 .menu-ocean { position: fixed; }
 .dive-world { position: absolute; top: 0; left: 0; width: 100%; height: var(--world-height); transform: translate3d(0, var(--camera-pan), 0); will-change: transform; }
@@ -91,7 +92,7 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .ocean-water { position: absolute; top: var(--surface-height); bottom: 0; left: 0; right: 0; overflow: hidden; background: linear-gradient(#a2d5df 0, #78b5cc 60dvh, #487f9e 160dvh, #0c3d60 300dvh, #071d36 480dvh, #020813 800dvh); }
 .ocean-surface { position: absolute; left: 0; right: 0; top: calc(var(--surface-height) - 9px); height: 20px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='20'%3E%3Cpath d='M0 7 Q125 17 250 8 T500 8 T750 8 T1000 8 V20 H0Z' fill='%23a2d5df'/%3E%3Cpath d='M0 7 Q125 17 250 8 T500 8 T750 8 T1000 8' fill='none' stroke='%23ccffff' stroke-opacity='.85'/%3E%3C/svg%3E") repeat-x; }
 .ocean-rays { position: absolute; inset: 0 0 auto; height: 220dvh; background: repeating-linear-gradient(105deg, transparent 0 10%, #d9ffff42 12% 15%, #d9ffff12 17%, transparent 20% 28%); mask-image: linear-gradient(#000 0%, #0009 35%, transparent 100%); }
-.ocean-darkness { position: absolute; inset: 0; background: radial-gradient(circle at var(--light-x) var(--light-y), transparent 42px, #01050d38 90px, #01050dbd 190px, #01050df5 340px); }
+.ocean-darkness { position: absolute; inset: 0; background: radial-gradient(circle at var(--light-x) var(--light-y), transparent 80px, #01050d26 180px, #01050d66 320px, #01050db3 480px, #01050df5 680px); }
 .ocean-particle { position: absolute; width: var(--particle-size); height: var(--particle-size); background: #c5edfa; opacity: .35; animation: pixel-drift var(--particle-duration) var(--particle-delay) linear infinite; }
 .ocean-school { position: absolute; left: 0; display: flex; gap: 30px; opacity: .75; animation: school-swim var(--swim-duration) var(--swim-delay) linear infinite; will-change: transform; }
 .ocean-school.swim-left { animation-direction: reverse; }
@@ -124,7 +125,7 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .game-prompt h1 { font-size: 36px; margin: 14px 0; }
 .prompt-hint { margin: 0; color: #a7bbd3; font: 18px var(--pixel-font); letter-spacing: 1px; }
 .is-diving .game-prompt { opacity: 0; translate: 0 -12px; pointer-events: none; }
-.answer-dock { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 22px max(18px, env(safe-area-inset-bottom)); background: linear-gradient(transparent, #050d19e8 30%, #050d19); z-index: 3; text-align: center; }
+.answer-dock { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 22px max(18px, env(safe-area-inset-bottom)); z-index: 3; text-align: center; }
 .answer-form { display: grid; grid-template-columns: minmax(0, 1fr) 100px; align-items: center; gap: 8px 12px; max-width: 660px; margin: auto; }
 .answer-form input { height: 62px; font: 26px/1 var(--pixel-font); letter-spacing: 1px; border-color: #73bfce; background: #0b192cdd; }
 .answer-form input:focus-visible { outline: none; }
@@ -179,7 +180,6 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .panel, .brand, .answer-dock, .dive-hud, .players > li, .error { animation: surface-in .45s ease both; }
 .game-prompt { animation: prompt-in .6s ease; }
 .results-popup[open] { animation: popup-in .4s cubic-bezier(.2,.8,.2,1) both; }
-.results-popup[open]::backdrop { animation: dim-in .4s ease both; }
 button { transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease, opacity .2s ease, border-color .2s ease; }
 input { transition: border-color .25s ease, box-shadow .25s ease, opacity .25s ease; }
 input:focus { border-color: var(--cyan); box-shadow: inset 3px 3px #040b15, 0 0 18px #80dfeb22; }
@@ -189,7 +189,6 @@ input:focus { border-color: var(--cyan); box-shadow: inset 3px 3px #040b15, 0 0 
 @keyframes surface-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
 @keyframes prompt-in { from { opacity: 0; scale: .97; } to { opacity: 1; scale: 1; } }
 @keyframes popup-in { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@keyframes dim-in { from { background-color: transparent; } to { background-color: rgb(3 9 19 / 78%); } }
 @keyframes rays-drift { from { transform: translateX(-2%); opacity: .65; } to { transform: translateX(2%); opacity: 1; } }
 @keyframes waves-drift { to { background-position-x: 1000px; } }
 @keyframes time-warning { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
