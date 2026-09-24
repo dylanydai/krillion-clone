@@ -1,6 +1,6 @@
 import { GameError } from "./errors.ts";
 import { ROUNDS_PER_GAME } from "./game-config.ts";
-import { createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, rematch, requireHost, reserveAnswer, settleRound, skipAnswer, startGame } from "./game.ts";
+import { createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, rematch, requireHost, reserveAnswer, setGameMode, settleRound, skipAnswer, startGame } from "./game.ts";
 import { parseFishColor, type FishColor } from "./fish.ts";
 import { judgeAnswer } from "./judge.ts";
 import { updateRoom } from "./store.ts";
@@ -10,6 +10,7 @@ import type { Attempt, Room, RoomView } from "./types.ts";
 export type Action =
   | { action: "join"; name: string }
   | { action: "customize"; color: FishColor }
+  | { action: "mode"; girlfriendFriendly: boolean }
   | { action: "start" | "next" | "rematch" }
   | { action: "answer"; answer: string; roundIndex: number }
   | { action: "retry"; roundIndex: number }
@@ -54,6 +55,7 @@ export async function act(store: RoomStore, code: string, token: string, action:
     switch (action.action) {
       case "join": joinRoom(room, token, action.name); break;
       case "customize": customizeFish(room, token, action.color); break;
+      case "mode": setGameMode(room, token, action.girlfriendFriendly); break;
       case "start": {
         requireHost(room, token);
         if (!process.env.AI_GATEWAY_API_KEY) throw new GameError("JUDGE_UNAVAILABLE", "Set AI_GATEWAY_API_KEY on the server before starting a game.", 503);
@@ -71,6 +73,10 @@ export function parseAction(value: unknown): Action {
   if (typeof value !== "object" || value === null || !("action" in value) || typeof value.action !== "string") throw new GameError("INVALID_REQUEST", "The request needs an action.");
   const body = value as Record<string, unknown>;
   const action = body.action;
+  if (action === "mode") {
+    if (typeof body.girlfriendFriendly !== "boolean") throw new GameError("INVALID_REQUEST", "Girlfriend friendly mode must be enabled or disabled.");
+    return { action, girlfriendFriendly: body.girlfriendFriendly };
+  }
   if (action === "start" || action === "next" || action === "rematch") return { action };
   if (action === "join" && typeof body.name === "string") return { action, name: body.name };
   if (action === "customize") {

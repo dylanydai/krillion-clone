@@ -169,6 +169,7 @@ export default function Game({ code }: { code: string }): ReactNode {
     {room.phase === "lobby" && <section className="panel">
       <h1>Waiting room</h1><p>{room.players.length} {room.players.length === 1 ? "player" : "players"} · {room.totalRounds} rounds · {ROUND_SECONDS} seconds per round</p>
       <FishCustomizer key={me.color} color={me.color} busy={busy !== null} onSave={(color: FishColor): Promise<void> => act("customize", { color })} />
+      <label className="game-mode"><input type="checkbox" checked={room.girlfriendFriendly} disabled={!host || busy !== null} onChange={(event): void => { void act("mode", { girlfriendFriendly: event.target.checked }); }} /><span>Girlfriend friendly<small>No computer science or quant questions</small></span></label>
       <div className="actions"><button onClick={(): void => { void copyInvite(); }} className="secondary">{copied ? "Invite copied" : "Copy invite link"}</button>
         {host ? <button disabled={busy !== null} onClick={(): void => { void act("start"); }}>Start game</button> : <p>Waiting for the host to start.</p>}</div>
     </section>}

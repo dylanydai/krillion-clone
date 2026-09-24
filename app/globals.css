@@ -35,6 +35,9 @@ button.secondary:hover:not(:disabled) { background: #19344a; border-color: var(-
 button:disabled { opacity: .5; cursor: not-allowed; }
 button:focus-visible, input:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.game-mode { display: flex; align-items: center; gap: 12px; margin: 24px 0; text-transform: none; letter-spacing: 0; }
+.game-mode input { width: 22px; height: 22px; padding: 0; flex-shrink: 0; accent-color: var(--cyan); box-shadow: none; }
+.game-mode small { display: block; margin-top: 4px; color: var(--muted); font-size: 18px; }
 .divider { display: flex; align-items: center; gap: 12px; color: #91a7be; margin: 10px 0 2px; text-align: center; font: 18px var(--pixel-font); }
 .divider::before, .divider::after { content: ""; height: 1px; background: #354960; flex: 1; }
 .code { letter-spacing: .18em; font-size: 27px; }

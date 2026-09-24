@@ -40,6 +40,7 @@ export type Round = {
 };
 
 export type Room = {
+  girlfriendFriendly: boolean;
   code: string;
   version: number;
   hostId: string;
@@ -64,6 +65,7 @@ export type PublicPlayer = {
 };
 
 export type RoomView = {
+  girlfriendFriendly: boolean;
   code: string;
   version: number;
   hostId: string;

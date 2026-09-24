@@ -1,5 +1,5 @@
 import { randomInt, randomUUID, createHash } from "node:crypto";
-import { CATEGORIES, categoryById, normalizeName } from "./categories.ts";
+import { categoriesForMode, categoryById, normalizeName } from "./categories.ts";
 import { GameError } from "./errors.ts";
 import { failure } from "./judge.ts";
 import { parseFishColor } from "./fish.ts";
@@ -38,7 +38,7 @@ export function createRoom(name: string, token: string, model: string, now: numb
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const code = Array.from({ length: 4 }, (): string => alphabet[randomInt(alphabet.length)]).join("");
   const host: Player = { id: randomUUID(), sessionHash: sessionHash(token), name: cleanName(name), color: "#80DFEB" };
-  return { code, version: 0, hostId: host.id, players: [host], phase: "lobby", roundIndex: -1, rounds: [], scores: {}, createdAt: now, model };
+  return { code, version: 0, hostId: host.id, players: [host], girlfriendFriendly: false, phase: "lobby", roundIndex: -1, rounds: [], scores: {}, createdAt: now, model };
 }
 
 export function member(room: Room, token: string): Player {
@@ -73,10 +73,16 @@ export function currentRound(room: Room): Round {
   return round;
 }
 
+export function setGameMode(room: Room, token: string, girlfriendFriendly: boolean): void {
+  requireHost(room, token);
+  if (room.phase !== "lobby") throw new GameError("GAME_STARTED", "Change the game mode in the lobby.", 409);
+  room.girlfriendFriendly = girlfriendFriendly;
+}
+
 function openRound(room: Room, now: number): void {
   room.roundIndex += 1;
   const playedCategories = new Set(room.rounds.map((round: Round): string => round.categoryId));
-  const availableCategories = CATEGORIES.filter((category): boolean => !playedCategories.has(category.id));
+  const availableCategories = categoriesForMode(room.girlfriendFriendly).filter((category): boolean => !playedCategories.has(category.id));
   if (availableCategories.length === 0) throw new Error("No unplayed categories remain.");
   const category = availableCategories[randomInt(availableCategories.length)];
   if (category === undefined) throw new Error("Cannot open a round without a category.");
@@ -218,7 +224,7 @@ export function publicRoom(room: Room, token: string, now: number): RoomView {
       attempt: attempt === undefined || (!revealed && player.id !== me.id) ? null : attempt,
     };
   });
-  return { code: room.code, version: room.version, hostId: room.hostId, me: me.id, phase: room.phase, roundIndex: room.roundIndex, totalRounds: ROUNDS_PER_GAME,
+  return { code: room.code, girlfriendFriendly: room.girlfriendFriendly, version: room.version, hostId: room.hostId, me: me.id, phase: room.phase, roundIndex: room.roundIndex, totalRounds: ROUNDS_PER_GAME,
     category: round === null ? null : categoryById(round.categoryId), endsAt: round === null ? null : round.endsAt,
     startsAt: round === null ? null : round.startedAt, serverNow: now, players, history };
 }

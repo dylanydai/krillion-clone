@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { cleanCode, createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, rematch, reserveAnswer, settleRound, skipAnswer, startGame } from "../lib/game.ts";
 import { parseAction } from "../lib/service.ts";
+import { setGameMode } from "../lib/game.ts";
+import { CATEGORIES, categoriesForMode } from "../lib/categories.ts";
 import { diveProgress } from "../lib/dive.ts";
 import { COUNTDOWN_SECONDS, ROUNDS_PER_GAME, ROUND_SECONDS } from "../lib/game-config.ts";
 import { failure } from "../lib/judge.ts";
@@ -10,6 +12,51 @@ import type { Judgment, Room } from "../lib/types.ts";
 const HOST = "host-secret";
 const GUEST = "guest-secret";
 const NOW = 100_000;
+
+test("friendly mode excludes technical prompts while standard mode keeps the full pool", (): void => {
+  assert.deepEqual(categoriesForMode(false), CATEGORIES);
+  const friendlyIds = new Set(categoriesForMode(true).map((category): string => category.id));
+  for (const id of ["languages", "firms", "data-structures", "algorithms", "databases", "operating-systems", "file-formats", "terminal-commands", "math-formulas", "machine-learning-concepts", "computer-parts", "web-browsers", "electronic-components", "compiler-optimizations", "graph-theory-concepts", "git-commands", "python-libraries", "build-tools", "web-frameworks", "command-line-shells", "llms"]) {
+    assert.equal(friendlyIds.has(id), false, `${id} must be excluded`);
+  }
+  for (const id of ["pasta-shapes", "ocean-animals", "music-genres", "board-games", "video-game-genres"]) {
+    assert.equal(friendlyIds.has(id), true, `${id} must remain available`);
+  }
+  assert.ok(friendlyIds.size >= ROUNDS_PER_GAME);
+});
+
+test("only the host can change mode in the lobby and friendly mode lasts through rematches", (): void => {
+  const room = createRoom("Host", HOST, "test", NOW);
+  joinRoom(room, GUEST, "Guest");
+  assert.equal(room.girlfriendFriendly, false);
+  assert.throws((): void => setGameMode(room, GUEST, true), /Only the host/);
+  setGameMode(room, HOST, true);
+  assert.equal(publicRoom(room, GUEST, NOW).girlfriendFriendly, true);
+  startGame(room, HOST, NOW);
+  assert.throws((): void => setGameMode(room, HOST, false), /in the lobby/);
+  const allowed = new Set(categoriesForMode(true).map((category): string => category.id));
+  for (let index = 0; index < ROUNDS_PER_GAME; index += 1) {
+    assert.ok(allowed.has(currentRound(room).categoryId));
+    const deadline = currentRound(room).endsAt;
+    settleRound(room, deadline);
+    nextRound(room, HOST, deadline);
+    if (index < ROUNDS_PER_GAME - 1) nextRound(room, HOST, deadline);
+  }
+  assert.equal(new Set(room.rounds.map((round): string => round.categoryId)).size, ROUNDS_PER_GAME);
+  rematch(room, HOST);
+  assert.equal(room.girlfriendFriendly, true);
+  setGameMode(room, HOST, false);
+  assert.equal(publicRoom(room, GUEST, NOW).girlfriendFriendly, false);
+});
+
+test("mode actions require an explicit boolean", (): void => {
+  for (const girlfriendFriendly of [true, false]) {
+    assert.deepEqual(parseAction({ action: "mode", girlfriendFriendly }), { action: "mode", girlfriendFriendly });
+  }
+  for (const girlfriendFriendly of [undefined, null, "true", 1]) {
+    assert.throws((): ReturnType<typeof parseAction> => parseAction({ action: "mode", girlfriendFriendly }), /enabled or disabled/);
+  }
+});
 
 function setup(): Room {
   const room = createRoom("Host", HOST, "test", NOW - COUNTDOWN_SECONDS * 1000);
