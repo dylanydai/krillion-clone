@@ -85,11 +85,11 @@ Disconnected players do not stop a round after its deadline.
 
 ## Judging
 
-Jev runs a yes/no relevance probe concurrently with rarity scoring using the server-side `AI_GATEWAY_API_KEY` and `JEV_MODEL`. The probe filters nonsense, fabricated variants, category mismatches, and instructions disguised as answers without penalizing obscurity. Only answers passing the probe receive scores; probe failures remain retryable while time remains.
+Jev runs a yes/no relevance probe using the server-side `AI_GATEWAY_API_KEY` and `JEV_MODEL`. The probe checks every condition in the prompt and filters nonsense, fabricated variants, category mismatches, and instructions disguised as answers without penalizing obscurity. An eligible uncached answer then receives three separate rarity scores, requested in sequence to avoid a burst of Gateway calls. The game averages all three scores. If any scoring run fails, the answer remains unscored and can be retried while time remains.
 There is no web search, verified-answer cache, or local answer catalog. Existing room rarity scores are reused for matching normalized answers in the same category, but every submission still runs the relevance probe.
 The prompt hides immediately on submission and stays hidden during judging and after acceptance. Rejected answers can be corrected while time remains. The timer stays visible during judging. The deadline is a hard cutoff: pending answers earn no depth, and late judging responses are ignored.
 
-The scoring rubric has six levels. The server divides Jev's result by five to produce a value from 0 to 1.
+The scoring rubric has six levels. The server divides each Jev result by five, then averages the three values to produce a value from 0 to 1. The rubric rates familiarity of the item itself; a weak fit with the prompt does not make a known item rare.
 The game converts that value to depth with `Math.round(value * 100) * 10` metres.
 Answers matching after Unicode, case, and whitespace normalization receive the same depth within a category. Different aliases are judged independently; there is no automatic canonical-name mapping. The deepest total after seven rounds wins, and ties share the win.
 
@@ -100,6 +100,10 @@ Rejected answers remain unscored. Players can try another answer while time rema
 
 The thresholds and rubric are initial MVP settings. They need evaluation with the intended player group.
 The app does not use fabricated scores when credentials or services are unavailable.
+
+## Local relevance eval
+
+Set `EVAL_MODE=1` alongside `AI_GATEWAY_API_KEY` in `.env.local`, then run `npm run dev` and open `http://localhost:3000/eval`. Search the built-in game questions or type a custom question, then enter one answer. Each eval makes one Jev relevance request and three separate rarity scoring requests, so it uses four live model calls and API credits. The three scores use the game's 0–5 rubric and show their jury average and corresponding depth. They are diagnostic if the relevance check rejects the answer. Eval mode does not change a game room. The page and API return 404 unless `EVAL_MODE=1`.
 
 ## Development checks
 
@@ -124,7 +128,7 @@ The test runner enforces process timeouts.
 - `lib/prompt-pack.ts`: Additional category titles and prompts.
 - `lib/archive-categories.ts`: Individual archived Daily Dive prompts, excluding equivalent existing categories.
 - `krillion-archive-questions.json`: Source dates, question numbers, and URLs for the imported archive. The September 21 source omits question 5.
-- `lib/judge.ts`: Concurrent Jev relevance checking, rarity scoring, and failure messages.
+- `lib/judge.ts`: Jev relevance checking, sequential jury scoring, and failure messages.
 - `lib/store.ts`: Shared Redis storage and explicit local memory storage.
 - `WORKFLOW_PLAN.md`: The original workflow design.
 
