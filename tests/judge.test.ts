@@ -64,11 +64,18 @@ test("game scoring waits for relevance and averages three runs", async (): Promi
     if ("relevance" in questions) { calls.push("relevance"); return probe; }
     return score(state, questions, model);
   };
-  const pending = judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, evaluate });
+  const pending = judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, scoringRuns: 3, evaluate });
   assert.deepEqual(calls, ["relevance"]);
   releaseProbe({ relevance: { type: "choice", choice: "yes" } });
   assert.equal((await pending).score, 0.6);
   assert.deepEqual(calls, ["relevance", "niche", "niche", "niche"]);
+});
+
+test("single-score mode uses one rarity evaluation after relevance", async (): Promise<void> => {
+  const calls: string[] = [];
+  const result = await judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, scoringRuns: 1, evaluate: evaluator(calls) });
+  assert.equal(result.score, 0.6);
+  assert.deepEqual(calls, ["relevance", "niche"]);
 });
 
 test("jury averages score variance and stops after a failed run", async (): Promise<void> => {
@@ -79,7 +86,7 @@ test("jury averages score variance and stops after a failed run", async (): Prom
     const probabilities = Object.fromEntries(Array.from({ length: 6 }, (_value: unknown, index: number): [string, number] => [String(index), index === count ? 1 : 0]));
     return { niche: { type: "score", score: count, probabilities } };
   };
-  const result = await scoreJury({ item, categoryId: "languages", model: "test", evaluate: varied });
+  const result = await scoreJury({ item, categoryId: "languages", model: "test", scoringRuns: 3, evaluate: varied });
   assert.ok(result.score !== null && Math.abs(result.score - 0.4) < 1e-12);
   assert.equal(count, 3);
 
@@ -89,7 +96,7 @@ test("jury averages score variance and stops after a failed run", async (): Prom
     if (count === 2) throw new GameError("JUDGE_UNAVAILABLE", "The second run failed.", 503);
     return { niche: { type: "score", score: 1, probabilities: { "0": 0, "1": 1, "2": 0, "3": 0, "4": 0, "5": 0 } } };
   };
-  const failed = await scoreJury({ item, categoryId: "languages", model: "test", evaluate: interrupted });
+  const failed = await scoreJury({ item, categoryId: "languages", model: "test", scoringRuns: 3, evaluate: interrupted });
   assert.equal(failed.status, "retryable_error");
   assert.equal(failed.score, null);
   assert.equal(count, 2);
@@ -104,7 +111,7 @@ test("rejected and malformed probes cannot award fresh or cached points", async 
         if ("relevance" in questions) return { relevance: { type: "choice", choice } };
         return evaluator([])(state, questions, model);
       };
-      const result = await judgeAnswer({ answer: "nonsense", categoryId: "languages", model: "test", cachedScores, evaluate });
+      const result = await judgeAnswer({ answer: "nonsense", categoryId: "languages", model: "test", cachedScores, scoringRuns: 3, evaluate });
       assert.equal(result.score, null);
       assert.equal(result.status, choice === "no" ? "rejected" : "retryable_error");
       assert.equal(result.relevancy, choice === "no" ? false : null);
@@ -117,7 +124,7 @@ test("probe outages do not accept a successfully graded answer", async (): Promi
     if ("relevance" in questions) throw new GameError("JUDGE_UNAVAILABLE", "Probe unavailable", 503);
     return evaluator([])(state, questions, model);
   };
-  const result = await judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, evaluate });
+  const result = await judgeAnswer({ answer: "Uiua", categoryId: "languages", model: "test", cachedScores: {}, scoringRuns: 3, evaluate });
   assert.equal(result.status, "retryable_error");
   assert.equal(result.score, null);
   assert.equal(result.relevancy, null);
@@ -127,7 +134,7 @@ test("probe outages do not accept a successfully graded answer", async (): Promi
 test("normalized rarity scores are reused only within their category", async (): Promise<void> => {
   for (const categoryId of ["languages", "board-games"] as const) {
     const calls: string[] = [];
-    const result = await judgeAnswer({ answer: "  GO  ", categoryId, model: "test", cachedScores: { "languages:go": 0.25 }, evaluate: evaluator(calls) });
+    const result = await judgeAnswer({ answer: "  GO  ", categoryId, model: "test", cachedScores: { "languages:go": 0.25 }, scoringRuns: 3, evaluate: evaluator(calls) });
     assert.deepEqual(calls, categoryId === "languages" ? ["relevance"] : ["relevance", "niche", "niche", "niche"]);
     assert.equal(result.score, categoryId === "languages" ? 0.25 : 0.6);
   }

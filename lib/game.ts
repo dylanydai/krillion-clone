@@ -4,7 +4,7 @@ import { GameError } from "./errors.ts";
 import { failure } from "./judge.ts";
 import { parseFishColor } from "./fish.ts";
 import { METRES_PER_POINT } from "./dive.ts";
-import type { Attempt, Judgment, Player, PublicPlayer, Room, RoomView, Round } from "./types.ts";
+import type { Attempt, Judgment, Player, PublicPlayer, Room, RoomView, Round, ScoringRuns } from "./types.ts";
 
 import { COUNTDOWN_SECONDS, ROUNDS_PER_GAME, ROUND_SECONDS } from "./game-config.ts";
 
@@ -38,7 +38,7 @@ export function createRoom(name: string, token: string, model: string, now: numb
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const code = Array.from({ length: 4 }, (): string => alphabet[randomInt(alphabet.length)]).join("");
   const host: Player = { id: randomUUID(), sessionHash: sessionHash(token), name: cleanName(name), color: "#80DFEB" };
-  return { code, version: 0, hostId: host.id, players: [host], girlfriendFriendly: false, phase: "lobby", roundIndex: -1, rounds: [], scores: {}, createdAt: now, model };
+  return { code, version: 0, hostId: host.id, players: [host], girlfriendFriendly: false, scoringRuns: 3, phase: "lobby", roundIndex: -1, rounds: [], scores: {}, createdAt: now, model };
 }
 
 export function member(room: Room, token: string): Player {
@@ -77,6 +77,13 @@ export function setGameMode(room: Room, token: string, girlfriendFriendly: boole
   requireHost(room, token);
   if (room.phase !== "lobby") throw new GameError("GAME_STARTED", "Change the game mode in the lobby.", 409);
   room.girlfriendFriendly = girlfriendFriendly;
+}
+
+export function setScoringRuns(room: Room, token: string, scoringRuns: ScoringRuns): void {
+  requireHost(room, token);
+  if (room.phase !== "lobby") throw new GameError("GAME_STARTED", "Change rarity scoring in the lobby.", 409);
+  if (scoringRuns !== 1 && scoringRuns !== 3) throw new GameError("INVALID_REQUEST", "Choose one or three rarity scores.");
+  room.scoringRuns = scoringRuns;
 }
 
 function openRound(room: Room, now: number): void {
@@ -243,7 +250,7 @@ export function publicRoom(room: Room, token: string, now: number): RoomView {
       attempt: attempt === undefined || (!revealed && player.id !== me.id) ? null : attempt,
     };
   });
-  return { code: room.code, girlfriendFriendly: room.girlfriendFriendly, version: room.version, hostId: room.hostId, me: me.id, phase: room.phase, roundIndex: room.roundIndex, totalRounds: ROUNDS_PER_GAME,
+  return { code: room.code, girlfriendFriendly: room.girlfriendFriendly, scoringRuns: room.scoringRuns, version: room.version, hostId: room.hostId, me: me.id, phase: room.phase, roundIndex: room.roundIndex, totalRounds: ROUNDS_PER_GAME,
     category: round === null ? null : categoryById(round.categoryId), endsAt: round === null ? null : round.endsAt,
     startsAt: round === null ? null : round.startedAt, serverNow: now, players, history };
 }

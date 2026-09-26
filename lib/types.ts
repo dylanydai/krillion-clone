@@ -4,6 +4,7 @@ import type { ArchiveCategoryId } from "./archive-categories.ts";
 import type { AdditionalCategoryId } from "./prompt-pack.ts";
 
 export type CategoryId = "languages" | "firms" | AdditionalCategoryId | ArchiveCategoryId;
+export type ScoringRuns = 1 | 3;
 
 export type Category = {
   id: CategoryId;
@@ -42,6 +43,7 @@ export type Round = {
 
 export type Room = {
   girlfriendFriendly: boolean;
+  scoringRuns: ScoringRuns;
   code: string;
   version: number;
   hostId: string;
@@ -67,6 +69,7 @@ export type PublicPlayer = {
 
 export type RoomView = {
   girlfriendFriendly: boolean;
+  scoringRuns: ScoringRuns;
   code: string;
   version: number;
   hostId: string;

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cleanCode, createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, refreshRound, rematch, reserveAnswer, settleRound, skipAnswer, startGame } from "../lib/game.ts";
+import { cleanCode, createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, refreshRound, rematch, reserveAnswer, setScoringRuns, settleRound, skipAnswer, startGame } from "../lib/game.ts";
 import { parseAction } from "../lib/service.ts";
 import { setGameMode } from "../lib/game.ts";
 import { CATEGORIES, categoriesForMode } from "../lib/categories.ts";
@@ -55,6 +55,31 @@ test("mode actions require an explicit boolean", (): void => {
   }
   for (const girlfriendFriendly of [undefined, null, "true", 1]) {
     assert.throws((): ReturnType<typeof parseAction> => parseAction({ action: "mode", girlfriendFriendly }), /enabled or disabled/);
+  }
+});
+
+test("only the host can choose one or three rarity scores in the lobby", (): void => {
+  const room = createRoom("Host", HOST, "test", NOW);
+  joinRoom(room, GUEST, "Guest");
+  assert.equal(room.scoringRuns, 3);
+  assert.throws((): void => setScoringRuns(room, GUEST, 1), /Only the host/);
+  setScoringRuns(room, HOST, 1);
+  assert.equal(publicRoom(room, GUEST, NOW).scoringRuns, 1);
+  startGame(room, HOST, NOW);
+  assert.throws((): void => setScoringRuns(room, HOST, 3), /in the lobby/);
+  for (let index = 0; index < ROUNDS_PER_GAME; index += 1) {
+    settleRound(room, currentRound(room).endsAt);
+    nextRound(room, HOST, currentRound(room).endsAt);
+    if (index < ROUNDS_PER_GAME - 1) nextRound(room, HOST, currentRound(room).endsAt);
+  }
+  rematch(room, HOST);
+  assert.equal(room.scoringRuns, 1);
+});
+
+test("scoring actions accept only one or three evaluations", (): void => {
+  for (const scoringRuns of [1, 3]) assert.deepEqual(parseAction({ action: "scoring", scoringRuns }), { action: "scoring", scoringRuns });
+  for (const scoringRuns of [undefined, null, 0, 2, 4, "1"]) {
+    assert.throws((): ReturnType<typeof parseAction> => parseAction({ action: "scoring", scoringRuns }), /one or three/);
   }
 });
 

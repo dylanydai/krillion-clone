@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { memoryStore, updateRoom } from "../lib/store.ts";
-import { createRoom, joinRoom, startGame } from "../lib/game.ts";
+import { createRoom, joinRoom, setScoringRuns, startGame } from "../lib/game.ts";
 import { submitAnswer } from "../lib/service.ts";
 import type { Judge } from "../lib/service.ts";
 import type { Judgment, Room } from "../lib/types.ts";
@@ -26,10 +26,12 @@ test("an outdated version cannot replace newer room state", async (): Promise<vo
 test("duplicate simultaneous answer requests invoke the judge only once", async (): Promise<void> => {
   const store = memoryStore();
   const room = createRoom("Host", "host", "test", Date.now());
+  setScoringRuns(room, "host", 1);
   startGame(room, "host", Date.now() - 4000);
   await store.create(room);
   let calls = 0;
-  const judge: Judge = async (): Promise<Judgment> => {
+  const judge: Judge = async (options): Promise<Judgment> => {
+    assert.equal(options.scoringRuns, 1);
     calls += 1;
     await new Promise<void>((resolve): void => { setTimeout(resolve, 20); });
     return { status: "scored", relevancy: true, score: 0.2, canonicalId: "languages:python", canonicalName: "Python", errorCode: null, message: null };

@@ -60,6 +60,7 @@ The host can also start alone to try the demo.
 Each round has a three-second countdown, followed by 25 seconds to answer. The answer field and Dive button are disabled during the countdown, and the server rejects early answers.
 The host can refresh an active question or redo the current round from the results or leaderboard, including the final leaderboard. This picks a different question, restarts the countdown and full answer window, and clears answers and depth gained from the replaced question. Judging responses for those answers cannot score.
 Players use the colour picker or enter a hex value in the waiting room, then save their fish colour. Colours are shared with everyone and retained for rematches; highlights, shadows, and glow follow the colour.
+The host chooses one rarity score or a three-score jury in the lobby. Three is the default, and the choice stays in place for rematches.
 After each round, a popup shows the prompt, answers, and depth gained in metres.
 The host clicks Next to show the total leaderboard, then starts the next round or opens a rematch lobby.
 Your fish keeps its depth between rounds. Depth is the only displayed scoring unit.
@@ -86,11 +87,11 @@ Disconnected players do not stop a round after its deadline.
 
 ## Judging
 
-Jev runs a yes/no relevance probe using the server-side `AI_GATEWAY_API_KEY` and `JEV_MODEL`. The probe checks every condition in the prompt and filters nonsense, fabricated variants, category mismatches, and instructions disguised as answers without penalizing obscurity. An eligible uncached answer then receives three separate rarity scores, requested in sequence to avoid a burst of Gateway calls. The game averages all three scores. If any scoring run fails, the answer remains unscored and can be retried while time remains.
+Jev runs a yes/no relevance probe using the server-side `AI_GATEWAY_API_KEY` and `JEV_MODEL`. The probe checks every condition in the prompt and filters nonsense, fabricated variants, category mismatches, and instructions disguised as answers without penalizing obscurity. An eligible uncached answer then receives one rarity score or three separate rarity scores, according to the lobby setting. Three-score requests run in sequence to avoid a burst of Gateway calls, and the game averages them. If any scoring run fails, the answer remains unscored and can be retried while time remains.
 There is no web search, verified-answer cache, or local answer catalog. Existing room rarity scores are reused for matching normalized answers in the same category, but every submission still runs the relevance probe.
 The prompt hides immediately on submission and stays hidden during judging and after acceptance. Rejected answers can be corrected while time remains. The timer stays visible during judging. The deadline is a hard cutoff: pending answers earn no depth, and late judging responses are ignored.
 
-The scoring rubric has six levels. The server divides each Jev result by five, then averages the three values to produce a value from 0 to 1. The rubric rates familiarity of the item itself; a weak fit with the prompt does not make a known item rare.
+The scoring rubric has six levels. The server divides each Jev result by five, then uses the single value or averages three values to produce a value from 0 to 1. The rubric rates familiarity of the item itself; a weak fit with the prompt does not make a known item rare.
 The game converts that value to depth with `Math.round(value * 100) * 10` metres.
 Answers matching after Unicode, case, and whitespace normalization receive the same depth within a category. Different aliases are judged independently; there is no automatic canonical-name mapping. The deepest total after seven rounds wins, and ties share the win.
 

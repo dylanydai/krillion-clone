@@ -1,16 +1,17 @@
 import { GameError } from "./errors.ts";
 import { ROUNDS_PER_GAME } from "./game-config.ts";
-import { createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, refreshRound, rematch, requireHost, reserveAnswer, setGameMode, settleRound, skipAnswer, startGame } from "./game.ts";
+import { createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, refreshRound, rematch, requireHost, reserveAnswer, setGameMode, setScoringRuns, settleRound, skipAnswer, startGame } from "./game.ts";
 import { parseFishColor, type FishColor } from "./fish.ts";
 import { judgeAnswer } from "./judge.ts";
 import { updateRoom } from "./store.ts";
 import type { RoomStore } from "./store.ts";
-import type { Attempt, Room, RoomView } from "./types.ts";
+import type { Attempt, Room, RoomView, ScoringRuns } from "./types.ts";
 
 export type Action =
   | { action: "join"; name: string }
   | { action: "customize"; color: FishColor }
   | { action: "mode"; girlfriendFriendly: boolean }
+  | { action: "scoring"; scoringRuns: ScoringRuns }
   | { action: "start" | "next" | "rematch" }
   | { action: "answer"; answer: string; roundIndex: number }
   | { action: "retry"; roundIndex: number }
@@ -44,7 +45,7 @@ export async function submitAnswer(options: { store: RoomStore; code: string; to
     return reserveAnswer({ room, token, roundIndex: action.roundIndex, answer: action.action === "answer" ? action.answer : "", now: Date.now(), retry: action.action === "retry" });
   });
   const { playerId, attempt } = reserved.value;
-  const judgment = await judge({ answer: attempt.answer, categoryId: currentRound(reserved.room).categoryId, model: reserved.room.model, cachedScores: reserved.room.scores });
+  const judgment = await judge({ answer: attempt.answer, categoryId: currentRound(reserved.room).categoryId, model: reserved.room.model, cachedScores: reserved.room.scores, scoringRuns: reserved.room.scoringRuns });
   const result = await updateRoom(store, code, (room: Room): void => finishAnswer({ room, roundIndex: action.roundIndex, playerId, attemptId: attempt.id, judgment, now: Date.now() }));
   return publicRoom(result.room, token, Date.now());
 }
@@ -57,6 +58,7 @@ export async function act(store: RoomStore, code: string, token: string, action:
       case "join": joinRoom(room, token, action.name); break;
       case "customize": customizeFish(room, token, action.color); break;
       case "mode": setGameMode(room, token, action.girlfriendFriendly); break;
+      case "scoring": setScoringRuns(room, token, action.scoringRuns); break;
       case "start": {
         requireHost(room, token);
         if (!process.env.AI_GATEWAY_API_KEY) throw new GameError("JUDGE_UNAVAILABLE", "Set AI_GATEWAY_API_KEY on the server before starting a game.", 503);
@@ -78,6 +80,10 @@ export function parseAction(value: unknown): Action {
   if (action === "mode") {
     if (typeof body.girlfriendFriendly !== "boolean") throw new GameError("INVALID_REQUEST", "Girlfriend friendly mode must be enabled or disabled.");
     return { action, girlfriendFriendly: body.girlfriendFriendly };
+  }
+  if (action === "scoring") {
+    if (body.scoringRuns !== 1 && body.scoringRuns !== 3) throw new GameError("INVALID_REQUEST", "Choose one or three rarity scores.");
+    return { action, scoringRuns: body.scoringRuns };
   }
   if (action === "start" || action === "next" || action === "rematch") return { action };
   if (action === "join" && typeof body.name === "string") return { action, name: body.name };

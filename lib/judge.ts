@@ -1,6 +1,6 @@
 import { categoryById, normalizeName } from "./categories.ts";
 import { GameError, MESSAGES } from "./errors.ts";
-import type { Category, CategoryId, Judgment } from "./types.ts";
+import type { Category, CategoryId, Judgment, ScoringRuns } from "./types.ts";
 
 type AcceptedAnswer = { id: string; name: string };
 
@@ -129,10 +129,11 @@ export function averageScores(scores: Judgment[]): number | null {
   return total / scores.length;
 }
 
-export async function scoreJury(options: { item: AcceptedAnswer; categoryId: CategoryId; model: string; evaluate?: Evaluate }): Promise<Judgment> {
-  const { item, categoryId, model, evaluate = evaluateJev } = options;
+export async function scoreJury(options: { item: AcceptedAnswer; categoryId: CategoryId; model: string; scoringRuns: ScoringRuns; evaluate?: Evaluate }): Promise<Judgment> {
+  const { item, categoryId, model, scoringRuns, evaluate = evaluateJev } = options;
+  if (scoringRuns === 1) return scoreItem({ item, categoryId, model, evaluate });
   const scores: Judgment[] = [];
-  for (let run = 0; run < 3; run += 1) {
+  for (let run = 0; run < scoringRuns; run += 1) {
     const result = await scoreItem({ item, categoryId, model, evaluate });
     if (result.status !== "scored") return result;
     scores.push(result);
@@ -166,13 +167,13 @@ export async function checkRelevance(options: { item: AcceptedAnswer; category: 
   }
 }
 
-export async function judgeAnswer(options: { answer: string; categoryId: CategoryId; model: string; cachedScores: Record<string, number>; evaluate?: Evaluate }): Promise<Judgment> {
-  const { answer, categoryId, model, cachedScores, evaluate = evaluateJev } = options;
+export async function judgeAnswer(options: { answer: string; categoryId: CategoryId; model: string; cachedScores: Record<string, number>; scoringRuns: ScoringRuns; evaluate?: Evaluate }): Promise<Judgment> {
+  const { answer, categoryId, model, cachedScores, scoringRuns, evaluate = evaluateJev } = options;
   const item: AcceptedAnswer = { id: `${categoryId}:${normalizeName(answer)}`, name: answer.normalize("NFKC").trim().replace(/\s+/g, " ") };
   const rejection = await checkRelevance({ item, category: categoryById(categoryId), model, evaluate });
   if (rejection !== null) return rejection;
   const cached = cachedScores[item.id];
   return cached === undefined
-    ? scoreJury({ item, categoryId, model, evaluate })
+    ? scoreJury({ item, categoryId, model, scoringRuns, evaluate })
     : { status: "scored", relevancy: true, score: cached, canonicalId: item.id, canonicalName: item.name, errorCode: null, message: null };
 }

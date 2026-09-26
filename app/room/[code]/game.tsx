@@ -170,6 +170,15 @@ export default function Game({ code }: { code: string }): ReactNode {
       <h1>Waiting room</h1><p>{room.players.length} {room.players.length === 1 ? "player" : "players"} · {room.totalRounds} rounds · {ROUND_SECONDS} seconds per round</p>
       <FishCustomizer key={me.color} color={me.color} busy={busy !== null} onSave={(color: FishColor): Promise<void> => act("customize", { color })} />
       <label className="game-mode"><input type="checkbox" checked={room.girlfriendFriendly} disabled={!host || busy !== null} onChange={(event): void => { void act("mode", { girlfriendFriendly: event.target.checked }); }} /><span>Girlfriend friendly<small>No computer science or quant questions</small></span></label>
+      <label className="scoring-mode" htmlFor="scoring-runs">Rarity scoring<small>Choose how many scores to request for each eligible answer.</small></label>
+      <select id="scoring-runs" value={room.scoringRuns} disabled={!host || busy !== null} onChange={(event): void => {
+        const scoringRuns = Number(event.target.value);
+        if (scoringRuns !== 1 && scoringRuns !== 3) throw new Error("Invalid rarity scoring choice.");
+        void act("scoring", { scoringRuns });
+      }}>
+        <option value={1}>1 score · faster</option>
+        <option value={3}>3 score jury · averaged</option>
+      </select>
       <div className="actions"><button onClick={(): void => { void copyInvite(); }} className="secondary">{copied ? "Invite copied" : "Copy invite link"}</button>
         {host ? <button disabled={busy !== null} onClick={(): void => { void act("start"); }}>Start game</button> : <p>Waiting for the host to start.</p>}</div>
     </section>}

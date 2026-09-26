@@ -26,6 +26,8 @@ a { color: var(--cyan); }
 form { display: flex; flex-direction: column; gap: 12px; }
 label { color: #c1d3e8; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; }
 input { width: 100%; min-width: 0; padding: 13px 14px; font: inherit; color: #e8f1ff; border: 2px solid #3c536e; border-radius: 0; background: #071221; box-shadow: inset 3px 3px 0 #040b15; caret-color: var(--pink); }
+select { width: 100%; padding: 13px 14px; font: inherit; color: #e8f1ff; border: 2px solid #3c536e; border-radius: 0; background: #071221; box-shadow: inset 3px 3px 0 #040b15; }
+select:disabled { opacity: .6; }
 input::placeholder { color: #687f9c; opacity: 1; }
 button { min-height: 48px; padding: 11px 20px; border: 2px solid #060e1b; background: var(--pink); color: #161329; border-radius: 0; font-size: 23px; line-height: 1; letter-spacing: 2px; text-transform: uppercase; box-shadow: inset 0 2px 0 #ffc0d5, inset 0 -3px 0 #c94f7a, 3px 3px 0 #060d1b; cursor: pointer; transition: background-color .12s, transform .12s; }
 button:hover:not(:disabled) { background: #ffa0be; transform: translateY(-1px); }
@@ -33,11 +35,14 @@ button:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: inset
 button.secondary { color: #d7edf7; border-color: #4a6880; background: #102238; box-shadow: inset 0 0 0 2px #081423, 3px 3px 0 #060d1b; }
 button.secondary:hover:not(:disabled) { background: #19344a; border-color: var(--cyan); }
 button:disabled { opacity: .5; cursor: not-allowed; }
-button:focus-visible, input:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .game-mode { display: flex; align-items: center; gap: 12px; margin: 24px 0; text-transform: none; letter-spacing: 0; }
 .game-mode input { width: 22px; height: 22px; padding: 0; flex-shrink: 0; accent-color: var(--cyan); box-shadow: none; }
 .game-mode small { display: block; margin-top: 4px; color: var(--muted); font-size: 18px; }
+.scoring-mode { display: block; margin-bottom: 8px; }
+.scoring-mode small { display: block; margin-top: 4px; color: var(--muted); font-size: 18px; text-transform: none; letter-spacing: 0; }
+#scoring-runs { margin-bottom: 24px; }
 .divider { display: flex; align-items: center; gap: 12px; color: #91a7be; margin: 10px 0 2px; text-align: center; font: 18px var(--pixel-font); }
 .divider::before, .divider::after { content: ""; height: 1px; background: #354960; flex: 1; }
 .code { letter-spacing: .18em; font-size: 27px; }
