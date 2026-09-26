@@ -1,0 +1,22 @@
+evaluate jev evals to judge for how small the thing is, as opposed to relevancy (i.e. gogo rated high for pixar even though she is well known)
+also use classifier jury!!
+
+space theme
+(rocket fuel to go up)
+add categories to classify guess results
+
+layers of the atomosphere
+start from ground, move your way up
+see different type of clouds
+
+reworking leaderboard
+rework end screen
+
+factual verification
+uzbekistan is NOT beside china for example
+
+penalize lower semantic similarity
+(ie baton pass is basically same as relay race, but because of lack of relevancy we might need to penalize)
+
+build eval suite to test
+
