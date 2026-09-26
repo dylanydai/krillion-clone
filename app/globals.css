@@ -115,8 +115,8 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .ocean-school span:nth-child(2) { margin-top: 17px; }
 .ocean-school span:nth-child(3) { margin-top: -9px; }
 .ocean-school span:nth-child(4) { margin-top: 8px; }
-.ocean-ruler { position: absolute; inset: 0 14px 0 auto; width: 64px; border-right: 1px solid #afcbd744; }
-.ocean-depth-mark { position: absolute; right: 0; width: 16px; height: 20dvh; border-top: 1px solid #afcbd777; background: repeating-linear-gradient(to bottom, transparent 0 calc(20% - 1px), #afcbd744 calc(20% - 1px) 20%) right top / 7px 100% no-repeat; }
+.ocean-ruler { position: absolute; inset: 0 14px 0 auto; width: 64px; background: linear-gradient(to right, #000 0 1px, #afcbd7 1px 2px, #000 2px 3px) right / 3px 100% no-repeat; }
+.ocean-depth-mark { position: absolute; right: 0; width: 16px; height: 20dvh; background: linear-gradient(to bottom, #000 0 1px, #afcbd7 1px 2px, #000 2px 3px) top right / 16px 3px no-repeat, repeating-linear-gradient(to bottom, #000 0 1px, #afcbd7 1px 2px, #000 2px 3px, transparent 3px 20%) right top / 7px 100% no-repeat; }
 .ocean-depth-mark span { position: absolute; right: 24px; top: -8px; color: #a8c4d6; white-space: nowrap; font: 16px var(--pixel-font); text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, -1px 0 0 #000, 1px 0 0 #000, -1px 1px 0 #000, 0 1px 0 #000, 1px 1px 0 #000; }
 .ocean-diver { position: absolute; top: 0; width: 150px; transform: translate(-50%, -20px); will-change: translate; color: var(--fish-color); text-align: center; }
 .dive-fish { position: relative; width: 64px; height: 40px; animation: fish-sway 3s ease-in-out infinite; }
