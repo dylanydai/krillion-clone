@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cleanCode, createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, rematch, reserveAnswer, settleRound, skipAnswer, startGame } from "../lib/game.ts";
+import { cleanCode, createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, refreshRound, rematch, reserveAnswer, settleRound, skipAnswer, startGame } from "../lib/game.ts";
 import { parseAction } from "../lib/service.ts";
 import { setGameMode } from "../lib/game.ts";
 import { CATEGORIES, categoriesForMode } from "../lib/categories.ts";
@@ -111,6 +111,35 @@ test("countdown blocks early answers and preserves the full answer window", (): 
   assert.equal(reserveAnswer({ room, token: GUEST, answer: "Python", roundIndex: 0, now: startedAt, retry: false }).attempt.receivedAt, startedAt);
   assert.throws(() => reserveAnswer({ room, token: HOST, answer: "Python", roundIndex: 0, now: currentRound(room).endsAt, retry: false }), /Time expired/);
   assert.throws(() => reserveAnswer({ room, token: HOST, answer: "Python", roundIndex: 1, now: NOW + 4000, retry: false }), /round is closed/);
+});
+
+test("host refresh replaces the question and timer, clears answers, and ignores old judging", (): void => {
+  const room = setup();
+  const oldCategory = currentRound(room).categoryId;
+  const pending = reserveAnswer({ room, token: GUEST, answer: "Python", roundIndex: 0, now: NOW + 1000, retry: false });
+  assert.throws((): void => refreshRound(room, GUEST, 0, NOW + 2000), /Only the host/);
+  refreshRound(room, HOST, 0, NOW + 2000);
+  const round = currentRound(room);
+  assert.notEqual(round.categoryId, oldCategory);
+  assert.equal(round.startedAt, NOW + 2000 + COUNTDOWN_SECONDS * 1000);
+  assert.equal(round.endsAt, round.startedAt + ROUND_SECONDS * 1000);
+  assert.deepEqual(round.answers, {});
+  assert.equal(room.roundIndex, 0);
+  assert.throws((): void => { reserveAnswer({ room, token: GUEST, answer: "New answer", roundIndex: 0, now: round.startedAt - 1, retry: false }); }, /not started/);
+  finishAnswer({ room, roundIndex: 0, playerId: pending.playerId, attemptId: pending.attempt.id, judgment: judgment(), now: round.startedAt });
+  assert.deepEqual(round.answers, {});
+  assert.deepEqual(room.scores, {});
+  reserveAnswer({ room, token: GUEST, answer: "New answer", roundIndex: 0, now: round.startedAt, retry: false });
+  assert.throws((): void => refreshRound(room, HOST, 1, round.startedAt), /active question/);
+  settleRound(room, round.endsAt);
+  assert.throws((): void => refreshRound(room, HOST, 0, round.endsAt), /active question/);
+});
+
+test("refresh actions require a valid round index", (): void => {
+  assert.deepEqual(parseAction({ action: "refresh", roundIndex: 2 }), { action: "refresh", roundIndex: 2 });
+  for (const roundIndex of [undefined, -1, 7, 1.5]) {
+    assert.throws((): ReturnType<typeof parseAction> => parseAction({ action: "refresh", roundIndex }), /valid round number/);
+  }
 });
 
 test("live depths are shared while answers remain private until the reveal", (): void => {

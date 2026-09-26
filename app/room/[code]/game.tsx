@@ -86,10 +86,10 @@ export default function Game({ code }: { code: string }): ReactNode {
     return (): void => clearInterval(timer);
   }, []);
 
-  useEffect((): void => { setAnswer(""); setError(null); }, [room?.roundIndex, room?.phase]);
+  useEffect((): void => { setAnswer(""); setError(null); }, [room?.roundIndex, room?.phase, room?.startsAt]);
   useEffect((): void => {
     if (countdown === 0 && room?.phase === "playing") answerInput.current?.focus();
-  }, [countdown, room?.roundIndex, room?.phase]);
+  }, [countdown, room?.roundIndex, room?.phase, room?.startsAt]);
 
   async function act(action: string, fields: Record<string, unknown> = {}): Promise<void> {
     if (busy !== null) return;
@@ -174,12 +174,13 @@ export default function Game({ code }: { code: string }): ReactNode {
         {host ? <button disabled={busy !== null} onClick={(): void => { void act("start"); }}>Start game</button> : <p>Waiting for the host to start.</p>}</div>
     </section>}
     {room.phase !== "lobby" && <FishDive players={room.players} me={room.me} sceneKey={sceneKey} roundIndex={room.roundIndex} totalRounds={room.totalRounds} onArrive={setSettledScene} roundScores={roundScores}>
-      {!hidePrompt && <section key={room.roundIndex} className="game-prompt">
+      {!hidePrompt && <section key={room.startsAt} className="game-prompt">
         <div className="prompt-number">Prompt {room.roundIndex + 1} of {room.totalRounds}</div>
         <h1>{room.category?.prompt}</h1>
         <p className="prompt-hint">Rarer answers sink deeper</p>
       </section>}
       <section className="answer-dock" aria-label="Round controls">
+      {host && room.phase === "playing" && seconds > 0 && <button type="button" className="secondary refresh-question" disabled={busy !== null} onClick={(): void => { void act("refresh", roundFields); }}>Refresh question &amp; timer</button>}
       {countdown > 0 && <div className="round-countdown" role="status">descending · the clock starts in <strong>{countdown}</strong></div>}
       {submitting && own === null && <p className="round-status" role="status">Submitting and judging your answer…</p>}
       {own !== null && <div className="round-status" role="status"><strong>{own.answer || "Skipped"}</strong><span>{attemptLabel(own)}</span>
@@ -187,7 +188,7 @@ export default function Game({ code }: { code: string }): ReactNode {
         {canRetry && room.phase === "playing" && seconds > 0 && <button className="secondary" disabled={busy !== null} onClick={(): void => { void act("retry", roundFields); }}>Retry saved answer</button>}
       </div>}
       {canAnswer && <form className="answer-form" onSubmit={(event: FormEvent<HTMLFormElement>): void => { event.preventDefault(); if (canAnswer) void act("answer", { ...roundFields, answer }); }}>
-        <label htmlFor="answer" className="sr-only">Your answer</label><input ref={answerInput} key={room.roundIndex} id="answer" value={answer} onChange={(event): void => setAnswer(event.target.value)} autoComplete="off" maxLength={120} required disabled={busy !== null || !canAnswer} placeholder="type one answer…" />
+        <label htmlFor="answer" className="sr-only">Your answer</label><input ref={answerInput} key={room.startsAt} id="answer" value={answer} onChange={(event): void => setAnswer(event.target.value)} autoComplete="off" maxLength={120} required disabled={busy !== null || !canAnswer} placeholder="type one answer…" />
         <button className="dive-control" disabled={busy !== null || !canAnswer}>Dive</button>
       </form>}
       {room.phase === "playing" && countdown === 0 && <div className={`round-time-track${timeRunningOut ? " running-out" : ""}`} role="progressbar" aria-label="Time remaining" aria-valuemin={0} aria-valuemax={ROUND_SECONDS} aria-valuenow={seconds}><span style={{ transform: `scaleX(${room.endsAt === null || room.startsAt === null ? 0 : Math.max(0, Math.min(1, (room.endsAt - now) / (room.endsAt - room.startsAt)))})` }} /></div>}

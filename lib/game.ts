@@ -82,13 +82,27 @@ export function setGameMode(room: Room, token: string, girlfriendFriendly: boole
 function openRound(room: Room, now: number): void {
   room.roundIndex += 1;
   const playedCategories = new Set(room.rounds.map((round: Round): string => round.categoryId));
-  const availableCategories = categoriesForMode(room.girlfriendFriendly).filter((category): boolean => !playedCategories.has(category.id));
-  if (availableCategories.length === 0) throw new Error("No unplayed categories remain.");
-  const category = availableCategories[randomInt(availableCategories.length)];
-  if (category === undefined) throw new Error("Cannot open a round without a category.");
+  const categoryId = chooseCategory(room, playedCategories);
   const startedAt = now + COUNTDOWN_SECONDS * 1000;
-  room.rounds.push({ categoryId: category.id, startedAt, endsAt: startedAt + ROUND_SECONDS * 1000, answers: {} });
+  room.rounds.push({ categoryId, startedAt, endsAt: startedAt + ROUND_SECONDS * 1000, answers: {} });
   room.phase = "playing";
+}
+
+function chooseCategory(room: Room, excluded: Set<string>): Round["categoryId"] {
+  const available = categoriesForMode(room.girlfriendFriendly).filter((category): boolean => !excluded.has(category.id));
+  if (available.length === 0) throw new GameError("NO_CATEGORIES", "No other questions are available for this game.", 409);
+  const category = available[randomInt(available.length)];
+  if (category === undefined) throw new Error("Cannot choose a question from a nonempty list.");
+  return category.id;
+}
+
+export function refreshRound(room: Room, token: string, roundIndex: number, now: number): void {
+  requireHost(room, token);
+  if (room.phase !== "playing" || room.roundIndex !== roundIndex) throw new GameError("ROUND_CLOSED", "Refresh only the active question.", 409);
+  const excluded = new Set(room.rounds.map((round: Round): string => round.categoryId));
+  const categoryId = chooseCategory(room, excluded);
+  const startedAt = now + COUNTDOWN_SECONDS * 1000;
+  room.rounds[roundIndex] = { categoryId, startedAt, endsAt: startedAt + ROUND_SECONDS * 1000, answers: {} };
 }
 
 export function startGame(room: Room, token: string, now: number): void {

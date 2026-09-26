@@ -140,6 +140,7 @@ body:has(.game-screen) > .menu-ocean { display: none; }
 .prompt-hint { margin: 0; color: #a7bbd3; font: 18px var(--pixel-font); letter-spacing: 1px; }
 .is-diving .game-prompt { opacity: 0; translate: 0 -12px; pointer-events: none; }
 .answer-dock { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 22px max(18px, env(safe-area-inset-bottom)); z-index: 3; text-align: center; }
+.refresh-question { display: block; margin: 0 auto 12px; font-size: 18px; }
 .answer-form { display: grid; grid-template-columns: minmax(0, 1fr) 100px; align-items: center; gap: 8px 12px; max-width: 660px; margin: auto; }
 .answer-form input { height: 62px; font: 26px/1 var(--pixel-font); letter-spacing: 1px; border-color: #73bfce; background: #0b192cdd; }
 .answer-form input:focus-visible { outline: none; }

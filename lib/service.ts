@@ -1,6 +1,6 @@
 import { GameError } from "./errors.ts";
 import { ROUNDS_PER_GAME } from "./game-config.ts";
-import { createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, rematch, requireHost, reserveAnswer, setGameMode, settleRound, skipAnswer, startGame } from "./game.ts";
+import { createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, refreshRound, rematch, requireHost, reserveAnswer, setGameMode, settleRound, skipAnswer, startGame } from "./game.ts";
 import { parseFishColor, type FishColor } from "./fish.ts";
 import { judgeAnswer } from "./judge.ts";
 import { updateRoom } from "./store.ts";
@@ -14,7 +14,8 @@ export type Action =
   | { action: "start" | "next" | "rematch" }
   | { action: "answer"; answer: string; roundIndex: number }
   | { action: "retry"; roundIndex: number }
-  | { action: "skip"; roundIndex: number };
+  | { action: "skip"; roundIndex: number }
+  | { action: "refresh"; roundIndex: number };
 
 export type Judge = typeof judgeAnswer;
 
@@ -64,6 +65,7 @@ export async function act(store: RoomStore, code: string, token: string, action:
       case "next": nextRound(room, token, Date.now()); break;
       case "rematch": rematch(room, token); break;
       case "skip": skipAnswer(room, token, action.roundIndex, Date.now()); break;
+      case "refresh": refreshRound(room, token, action.roundIndex, Date.now()); break;
     }
   });
   return publicRoom(result.room, token, Date.now());
@@ -85,6 +87,6 @@ export function parseAction(value: unknown): Action {
   if (typeof body.roundIndex !== "number" || !Number.isInteger(body.roundIndex) || body.roundIndex < 0 || body.roundIndex >= ROUNDS_PER_GAME) throw new GameError("INVALID_REQUEST", "The request needs a valid round number.");
   const roundIndex = body.roundIndex;
   if (action === "answer" && typeof body.answer === "string") return { action, answer: body.answer, roundIndex };
-  if (action === "retry" || action === "skip") return { action, roundIndex };
+  if (action === "retry" || action === "skip" || action === "refresh") return { action, roundIndex };
   throw new GameError("INVALID_REQUEST", "The action or its fields are invalid.");
 }
