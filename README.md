@@ -58,7 +58,7 @@ Rooms expire 24 hours after their last stored change.
 The host creates a room with a four-letter uppercase code and no player limit.
 The host can also start alone to try the demo.
 Each round has a three-second countdown, followed by 25 seconds to answer. The answer field and Dive button are disabled during the countdown, and the server rejects early answers.
-While a round is active, the host can refresh its question and timer for everyone. This picks a different question, restarts the countdown and full answer window, and clears answers to the replaced question. Judging responses for those answers cannot score.
+The host can refresh an active question or redo the current round from the results or leaderboard, including the final leaderboard. This picks a different question, restarts the countdown and full answer window, and clears answers and depth gained from the replaced question. Judging responses for those answers cannot score.
 Players use the colour picker or enter a hex value in the waiting room, then save their fish colour. Colours are shared with everyone and retained for rematches; highlights, shadows, and glow follow the colour.
 After each round, a popup shows the prompt, answers, and depth gained in metres.
 The host clicks Next to show the total leaderboard, then starts the next round or opens a rematch lobby.

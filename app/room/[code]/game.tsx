@@ -218,7 +218,10 @@ export default function Game({ code }: { code: string }): ReactNode {
       </>}
       {connectionError !== null && <p className="error" role="alert">Connection issue: {connectionError} Reconnecting…</p>}
       {error !== null && <p className="error" role="alert">{error}</p>}
-      {host ? <button disabled={busy !== null || hasJudging} onClick={(): void => { void act(room.phase === "finished" ? "rematch" : "next"); }}>{room.phase === "results" ? "Next" : room.phase === "finished" ? "Open rematch lobby" : "Start next round"}</button> : <p role="status">Waiting for the host to {room.phase === "results" ? "show the leaderboard" : room.phase === "finished" ? "open a rematch" : "start the next round"}.</p>}
+      {host ? <div className="actions result-actions">
+        <button className="secondary" disabled={busy !== null} onClick={(): void => { void act("refresh", roundFields); }}>Redo round</button>
+        <button disabled={busy !== null || hasJudging} onClick={(): void => { void act(room.phase === "finished" ? "rematch" : "next"); }}>{room.phase === "results" ? "Next" : room.phase === "finished" ? "Open rematch lobby" : "Start next round"}</button>
+      </div> : <p role="status">Waiting for the host to {room.phase === "results" ? "show the leaderboard" : room.phase === "finished" ? "open a rematch" : "start the next round"}.</p>}
       {room.phase === "finished" && <section className="answer-history" aria-label="Your answers"><h3>Your answers</h3>{room.history.map((round, index: number): ReactNode => {
         const result = round.results.find((entry): boolean => entry.playerId === room.me);
         if (result === undefined) throw new Error("Round history is missing your answer.");

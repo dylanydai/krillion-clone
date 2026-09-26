@@ -83,7 +83,8 @@ input.code { text-align: center; font-size: 30px; padding: 9px 14px; }
 body:has(.results-popup[open]) { overflow: hidden; }
 .result-fish { display: block; margin-bottom: 16px; }
 .results-popup h2 { font-size: 34px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; }
-.popup-content > button { margin-top: 20px; width: 100%; }
+.result-actions { margin-top: 20px; }
+.result-actions button { flex: 1 1 180px; }
 .popup-content { animation: surface-in .3s ease; }
 .round-prompt { font: 28px/1.2 var(--pixel-font); }
 .answer-history { margin-top: 24px; border-top: 1px solid var(--edge); padding-top: 20px; }

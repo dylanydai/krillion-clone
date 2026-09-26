@@ -98,11 +98,16 @@ function chooseCategory(room: Room, excluded: Set<string>): Round["categoryId"] 
 
 export function refreshRound(room: Room, token: string, roundIndex: number, now: number): void {
   requireHost(room, token);
-  if (room.phase !== "playing" || room.roundIndex !== roundIndex) throw new GameError("ROUND_CLOSED", "Refresh only the active question.", 409);
+  if (room.phase === "lobby" || room.roundIndex !== roundIndex) throw new GameError("ROUND_CLOSED", "Redo only the current round.", 409);
   const excluded = new Set(room.rounds.map((round: Round): string => round.categoryId));
   const categoryId = chooseCategory(room, excluded);
+  const oldCategoryId = currentRound(room).categoryId;
   const startedAt = now + COUNTDOWN_SECONDS * 1000;
   room.rounds[roundIndex] = { categoryId, startedAt, endsAt: startedAt + ROUND_SECONDS * 1000, answers: {} };
+  for (const key of Object.keys(room.scores)) {
+    if (key.startsWith(`${oldCategoryId}:`)) delete room.scores[key];
+  }
+  room.phase = "playing";
 }
 
 export function startGame(room: Room, token: string, now: number): void {

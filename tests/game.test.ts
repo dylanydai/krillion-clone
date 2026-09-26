@@ -130,9 +130,49 @@ test("host refresh replaces the question and timer, clears answers, and ignores 
   assert.deepEqual(round.answers, {});
   assert.deepEqual(room.scores, {});
   reserveAnswer({ room, token: GUEST, answer: "New answer", roundIndex: 0, now: round.startedAt, retry: false });
-  assert.throws((): void => refreshRound(room, HOST, 1, round.startedAt), /active question/);
+  assert.throws((): void => refreshRound(room, HOST, 1, round.startedAt), /current round/);
   settleRound(room, round.endsAt);
-  assert.throws((): void => refreshRound(room, HOST, 0, round.endsAt), /active question/);
+  assert.equal(room.phase, "results");
+  refreshRound(room, HOST, 0, round.endsAt);
+  assert.equal(room.phase, "playing");
+});
+
+test("redo after results or leaderboard removes round points and cached scores", (): void => {
+  const room = setup();
+  const oldCategory = currentRound(room).categoryId;
+  const answer = reserveAnswer({ room, token: HOST, answer: "Python", roundIndex: 0, now: NOW, retry: false });
+  finishAnswer({ room, roundIndex: 0, playerId: answer.playerId, attemptId: answer.attempt.id, judgment: { ...judgment(0.4), canonicalId: `${oldCategory}:python` }, now: NOW + 1000 });
+  skipAnswer(room, GUEST, 0, NOW + 1000);
+  assert.equal(room.phase, "results");
+  assert.equal(publicRoom(room, HOST, NOW + 1000).players[0].points, 40);
+  assert.equal(room.scores[`${oldCategory}:python`], 0.4);
+  refreshRound(room, HOST, 0, NOW + 2000);
+  assert.equal(room.phase, "playing");
+  assert.equal(publicRoom(room, HOST, NOW + 2000).players[0].points, 0);
+  assert.equal(publicRoom(room, HOST, NOW + 2000).history.length, 0);
+  assert.equal(room.scores[`${oldCategory}:python`], undefined);
+  assert.notEqual(currentRound(room).categoryId, oldCategory);
+
+  settleRound(room, currentRound(room).endsAt);
+  nextRound(room, HOST, currentRound(room).endsAt);
+  assert.equal(room.phase, "leaderboard");
+  refreshRound(room, HOST, 0, NOW + 40_000);
+  assert.equal(room.phase, "playing");
+  assert.equal(currentRound(room).startedAt, NOW + 40_000 + COUNTDOWN_SECONDS * 1000);
+});
+
+test("the host can redo the final round from the final leaderboard", (): void => {
+  const room = setup();
+  for (let index = 0; index < ROUNDS_PER_GAME; index += 1) {
+    settleRound(room, currentRound(room).endsAt);
+    nextRound(room, HOST, currentRound(room).endsAt);
+    if (index < ROUNDS_PER_GAME - 1) nextRound(room, HOST, currentRound(room).endsAt);
+  }
+  assert.equal(room.phase, "finished");
+  refreshRound(room, HOST, ROUNDS_PER_GAME - 1, NOW + 300_000);
+  assert.equal(room.phase, "playing");
+  assert.equal(room.roundIndex, ROUNDS_PER_GAME - 1);
+  assert.equal(publicRoom(room, HOST, NOW + 300_000).history.length, ROUNDS_PER_GAME - 1);
 });
 
 test("refresh actions require a valid round index", (): void => {
