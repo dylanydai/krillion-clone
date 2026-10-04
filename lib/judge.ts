@@ -7,7 +7,7 @@ type AcceptedAnswer = { id: string; name: string };
 type Question = { type: "choice" | "score"; instructions: string; criteria: Record<string, string> | string[] };
 export type Evaluate = (state: Record<string, unknown>, questions: Record<string, Question>, model: string) => Promise<Record<string, unknown>>;
 
-const SERVICE_ERRORS = new Set(["JUDGE_UNAVAILABLE", "JUDGE_BILLING_REQUIRED"]);
+const SERVICE_ERRORS = new Set(["JUDGE_UNAVAILABLE"]);
 const LEVELS: string[] = [
   "An immediate default that this audience readily recalls for the category.",
   "A familiar alternative or a popular clever pick that many players know.",
@@ -31,12 +31,23 @@ function probability(value: unknown): number {
   return value;
 }
 
+export function requireJevKey(): string {
+  const key = process.env.TYPESAFE_API_KEY;
+  if (!key || key.trim().length === 0) throw new GameError("JUDGE_UNAVAILABLE", "Set TYPESAFE_API_KEY on the server before starting a game.", 503);
+  return key;
+}
+
+export function jevModel(): string {
+  const model = process.env.JEV_MODEL === undefined ? "jev-latest" : process.env.JEV_MODEL;
+  if (model.trim().length === 0) throw new GameError("JUDGE_UNAVAILABLE", "JEV_MODEL must be a TypeSafe model name, such as jev-latest.", 503);
+  return model;
+}
+
 export const evaluateJev: Evaluate = async (state: Record<string, unknown>, questions: Record<string, Question>, model: string): Promise<Record<string, unknown>> => {
-  const key = process.env.AI_GATEWAY_API_KEY;
-  if (!key) throw new GameError("JUDGE_UNAVAILABLE", "Set AI_GATEWAY_API_KEY on the server before starting a game.", 503);
+  const key = requireJevKey();
   let response: Response;
   try {
-    response = await fetch("https://ai-gateway.vercel.sh/v1/evaluate", {
+    response = await fetch("https://api.typesafe.ai/v1/systemone", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({ model, state, questions }),
@@ -44,7 +55,16 @@ export const evaluateJev: Evaluate = async (state: Record<string, unknown>, ques
       cache: "no-store",
     });
   } catch (error: unknown) {
+    if (!(error instanceof TypeError) && !(error instanceof Error && error.name === "TimeoutError")) throw error;
     throw new GameError("JUDGE_UNAVAILABLE", error instanceof Error && error.name === "TimeoutError" ? "The judge timed out. Retry judging." : "Could not connect to the judge. Retry judging.", 503);
+  }
+  if (!response.ok) {
+    const detail = response.status === 401
+      ? "TypeSafe rejected TYPESAFE_API_KEY. The host must check the server API key."
+      : response.status === 429 || response.status === 529
+        ? "TypeSafe is temporarily busy. Wait briefly before retrying judging."
+        : `The judge returned HTTP ${response.status}. Retry judging.`;
+    throw new GameError("JUDGE_UNAVAILABLE", `${detail} Your answer is saved.`, 502);
   }
   let payload: unknown;
   try {
@@ -52,12 +72,6 @@ export const evaluateJev: Evaluate = async (state: Record<string, unknown>, ques
   } catch (error: unknown) {
     if (!(error instanceof SyntaxError)) throw error;
     throw new GameError("JUDGE_UNAVAILABLE", `The judge returned invalid JSON (HTTP ${response.status}). Retry judging.`, 502);
-  }
-  if (!response.ok) {
-    if (typeof payload === "object" && payload !== null && "error" in payload && typeof payload.error === "object" && payload.error !== null && "type" in payload.error && payload.error.type === "customer_verification_required") {
-      throw new GameError("JUDGE_BILLING_REQUIRED", MESSAGES.JUDGE_BILLING_REQUIRED, 503);
-    }
-    throw new GameError("JUDGE_UNAVAILABLE", `The judge returned HTTP ${response.status}. Your answer is saved. Retry judging.`, 502);
   }
   return objectValue(objectValue(payload, "response").answers, "answers");
 };

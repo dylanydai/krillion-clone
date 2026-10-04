@@ -20,7 +20,6 @@ export const MESSAGES: Record<string, string> = {
   INVALID_SUBMISSION: "Enter an item name. Instructions to the judge are not an answer.",
   UNSUPPORTED_VARIANT: "This modified name or variant does not fit this prompt.",
   JUDGE_UNAVAILABLE: "The judge is unavailable. Your answer is saved. Retry judging.",
-  JUDGE_BILLING_REQUIRED: "Vercel requires a payment card before AI Gateway can judge answers. The host must enable AI Gateway billing. Your answer is saved.",
   SCORE_UNCERTAIN: "The item was accepted, but the judge could not determine its depth. Retry judging.",
   SKIPPED: "You skipped this round.",
 };

@@ -2,7 +2,7 @@ import { CATEGORIES } from "../../../lib/categories";
 import { GameError } from "../../../lib/errors";
 import { cleanAnswer } from "../../../lib/game";
 import { apiError, body } from "../../../lib/http";
-import { averageScores, evaluateTrials } from "../../../lib/judge";
+import { averageScores, evaluateTrials, jevModel } from "../../../lib/judge";
 import type { Category, Judgment } from "../../../lib/types";
 
 export const runtime = "nodejs";
@@ -29,7 +29,7 @@ export async function POST(request: Request): Promise<Response> {
     } else {
       throw new GameError("INVALID_REQUEST", "Select a listed question or enter a custom question.");
     }
-    const model = process.env.JEV_MODEL === undefined ? "typesafe-ai/jev" : process.env.JEV_MODEL;
+    const model = jevModel();
     const result = await evaluateTrials({ item: { id: "eval", name: answer }, category, model });
     return Response.json({
       question: category.prompt,

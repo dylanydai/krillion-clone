@@ -13,8 +13,7 @@ npm ci
 cp .env.example .env.local
 ```
 
-Set `AI_GATEWAY_API_KEY` in `.env.local` to a Vercel AI Gateway key.
-A Vercel account access token is a different credential.
+Set `TYPESAFE_API_KEY` in `.env.local` to a TypeSafe API key from [the TypeSafe console](https://console.typesafe.ai).
 Keep `ROOM_STORE=memory` for local development, then start the app:
 
 ```sh
@@ -41,8 +40,8 @@ The production server refuses to use memory storage.
 Required production variables:
 
 ```dotenv
-AI_GATEWAY_API_KEY=<your Vercel AI Gateway key>
-JEV_MODEL=typesafe-ai/jev
+TYPESAFE_API_KEY=<your TypeSafe API key>
+JEV_MODEL=jev-latest
 ROOM_STORE=redis
 UPSTASH_REDIS_REST_URL=<your Upstash REST endpoint>
 UPSTASH_REDIS_REST_TOKEN=<your Upstash REST token>
@@ -52,6 +51,16 @@ Keep these variables on the server. Do not add the `NEXT_PUBLIC_` prefix.
 Vercel detects the build command from the Next.js project.
 The app does not need a separate WebSocket server or database migration.
 Rooms expire 24 hours after their last stored change.
+
+## Cut over from AI Gateway
+
+1. Create a TypeSafe API key in the TypeSafe console.
+2. Set `TYPESAFE_API_KEY` in `.env.local` and in the Vercel environments you deploy to. Replace `JEV_MODEL=typesafe-ai/jev` with `JEV_MODEL=jev-latest`.
+3. Restart the local server or redeploy Vercel so it reads the new variables. Create fresh rooms: existing rooms retain the model selected when they were created.
+4. With `EVAL_MODE=1` locally, submit a known valid answer on `/eval` and confirm relevance and all three scores return. This makes four paid API calls. Keep eval mode disabled in production.
+5. After verification, remove the unused `AI_GATEWAY_API_KEY` from local and deployment settings.
+
+Missing credentials stop game start. Invalid keys, rate limits, overload, and malformed responses leave answers unscored with explicit errors; players can retry while time remains.
 
 ## Game flow
 
@@ -87,7 +96,7 @@ Disconnected players do not stop a round after its deadline.
 
 ## Judging
 
-Jev runs a yes/no relevance probe using the server-side `AI_GATEWAY_API_KEY` and `JEV_MODEL`. The probe checks every condition in the prompt and filters nonsense, fabricated variants, category mismatches, and instructions disguised as answers without penalizing obscurity. An eligible uncached answer then receives one rarity score or three separate rarity scores, according to the lobby setting. Three-score requests run in sequence to avoid a burst of Gateway calls, and the game averages them. If any scoring run fails, the answer remains unscored and can be retried while time remains.
+Jev runs a yes/no relevance probe using the server-side `TYPESAFE_API_KEY` and `JEV_MODEL`. The probe checks every condition in the prompt and filters nonsense, fabricated variants, category mismatches, and instructions disguised as answers without penalizing obscurity. An eligible uncached answer then receives one rarity score or three separate rarity scores, according to the lobby setting. Three-score requests run in sequence to avoid a burst of TypeSafe calls, and the game averages them. If any scoring run fails, the answer remains unscored and can be retried while time remains.
 There is no web search, verified-answer cache, or local answer catalog. Existing room rarity scores are reused for matching normalized answers in the same category, but every submission still runs the relevance probe.
 The prompt hides immediately on submission and stays hidden during judging and after acceptance. Rejected answers can be corrected while time remains. The timer stays visible during judging. The deadline is a hard cutoff: pending answers earn no depth, and late judging responses are ignored.
 
@@ -105,7 +114,7 @@ The app does not use fabricated scores when credentials or services are unavaila
 
 ## Local relevance eval
 
-Set `EVAL_MODE=1` alongside `AI_GATEWAY_API_KEY` in `.env.local`, then run `npm run dev` and open `http://localhost:3000/eval`. Search the built-in game questions or type a custom question, then enter one answer. Each eval makes one Jev relevance request and three separate rarity scoring requests, so it uses four live model calls and API credits. The three scores use the game's 0–5 rubric and show their jury average and corresponding depth. They are diagnostic if the relevance check rejects the answer. Eval mode does not change a game room. The page and API return 404 unless `EVAL_MODE=1`.
+Set `EVAL_MODE=1` alongside `TYPESAFE_API_KEY` in `.env.local`, then run `npm run dev` and open `http://localhost:3000/eval`. Search the built-in game questions or type a custom question, then enter one answer. Each eval makes one Jev relevance request and three separate rarity scoring requests, so it uses four live model calls and API credits. The three scores use the game's 0–5 rubric and show their jury average and corresponding depth. They are diagnostic if the relevance check rejects the answer. Eval mode does not change a game room. The page and API return 404 unless `EVAL_MODE=1`.
 
 ## Development checks
 
@@ -134,6 +143,6 @@ The test runner enforces process timeouts.
 - `lib/store.ts`: Shared Redis storage and explicit local memory storage.
 - `WORKFLOW_PLAN.md`: The original workflow design.
 
-The API uses [Vercel's HTTP evaluation endpoint](https://vercel.com/docs/ai-gateway/modalities/evaluation).
+The API calls [TypeSafe's HTTP endpoint](https://docs.typesafe.ai/api) directly at `https://api.typesafe.ai/v1/systemone` with bearer authentication. `JEV_MODEL` defaults to `jev-latest`; set a [versioned model ID](https://docs.typesafe.ai/models) to pin a release.
 The score follows [Jev's ordered rubric levels](https://docs.typesafe.ai/primitives/score).
 The storage adapter uses the [Upstash Redis REST API](https://upstash.com/docs/redis/features/restapi).

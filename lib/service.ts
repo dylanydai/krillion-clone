@@ -2,7 +2,7 @@ import { GameError } from "./errors.ts";
 import { ROUNDS_PER_GAME } from "./game-config.ts";
 import { createRoom, currentRound, customizeFish, finishAnswer, joinRoom, member, nextRound, publicRoom, refreshRound, rematch, requireHost, reserveAnswer, setGameMode, setScoringRuns, settleRound, skipAnswer, startGame } from "./game.ts";
 import { parseFishColor, type FishColor } from "./fish.ts";
-import { judgeAnswer } from "./judge.ts";
+import { judgeAnswer, requireJevKey } from "./judge.ts";
 import { updateRoom } from "./store.ts";
 import type { RoomStore } from "./store.ts";
 import type { Attempt, Room, RoomView, ScoringRuns } from "./types.ts";
@@ -61,7 +61,7 @@ export async function act(store: RoomStore, code: string, token: string, action:
       case "scoring": setScoringRuns(room, token, action.scoringRuns); break;
       case "start": {
         requireHost(room, token);
-        if (!process.env.AI_GATEWAY_API_KEY) throw new GameError("JUDGE_UNAVAILABLE", "Set AI_GATEWAY_API_KEY on the server before starting a game.", 503);
+        requireJevKey();
         startGame(room, token, Date.now()); break;
       }
       case "next": nextRound(room, token, Date.now()); break;
