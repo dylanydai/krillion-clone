@@ -42,6 +42,7 @@ export default function Home(): ReactNode {
         <button type="submit" value="join" className="secondary" disabled={busy}>Join room</button>
       </form>
       {error !== null && <p className="error" role="alert">{error}</p>}
+      <a href="/eval">Try answer evals</a>
     </section>
   </div>;
 }

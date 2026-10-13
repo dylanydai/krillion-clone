@@ -57,7 +57,7 @@ Rooms expire 24 hours after their last stored change.
 1. Create a TypeSafe API key in the TypeSafe console.
 2. Set `TYPESAFE_API_KEY` in `.env.local` and in the Vercel environments you deploy to. Replace `JEV_MODEL=typesafe-ai/jev` with `JEV_MODEL=jev-latest`.
 3. Restart the local server or redeploy Vercel so it reads the new variables. Create fresh rooms: existing rooms retain the model selected when they were created.
-4. With `EVAL_MODE=1` locally, submit a known valid answer on `/eval` and confirm relevance and all three scores return. This makes four paid API calls. Keep eval mode disabled in production.
+4. Submit a known valid answer on `/eval` and confirm relevance and all three scores return. This makes four paid API calls.
 5. After verification, remove the unused `AI_GATEWAY_API_KEY` from local and deployment settings.
 
 Missing credentials stop game start. Invalid keys, rate limits, overload, and malformed responses leave answers unscored with explicit errors; players can retry while time remains.
@@ -112,9 +112,9 @@ Rejected answers remain unscored. Players can try another answer while time rema
 The thresholds and rubric are initial MVP settings. They need evaluation with the intended player group.
 The app does not use fabricated scores when credentials or services are unavailable.
 
-## Local relevance eval
+## Public answer eval
 
-Set `EVAL_MODE=1` alongside `TYPESAFE_API_KEY` in `.env.local`, then run `npm run dev` and open `http://localhost:3000/eval`. Search the built-in game questions or type a custom question, then enter one answer. Each eval makes one Jev relevance request and three separate rarity scoring requests, so it uses four live model calls and API credits. The three scores use the game's 0–5 rubric and show their jury average and corresponding depth. They are diagnostic if the relevance check rejects the answer. Eval mode does not change a game room. The page and API return 404 unless `EVAL_MODE=1`.
+Open `/eval` from the home page to test an answer. For local testing, set `TYPESAFE_API_KEY` in `.env.local`, run `npm run dev`, and open `http://localhost:3000/eval`. Search the built-in game questions or type a custom question, then enter one answer. Each eval makes one Jev relevance request and three separate rarity scoring requests, so it uses four live model calls and API credits. The three scores use the game's 0–5 rubric and show their jury average and corresponding depth. They are diagnostic if the relevance check rejects the answer. Evals do not change a game room. The page and API are publicly available.
 
 ## Development checks
 

@@ -8,7 +8,6 @@ import type { Category, Judgment } from "../../../lib/types";
 export const runtime = "nodejs";
 
 export async function POST(request: Request): Promise<Response> {
-  if (process.env.EVAL_MODE !== "1") return new Response(null, { status: 404 });
   try {
     const input = await body(request);
     if (typeof input !== "object" || input === null || !("answer" in input)) {
