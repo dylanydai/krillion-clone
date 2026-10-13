@@ -169,7 +169,7 @@ export default function Game({ code }: { code: string }): ReactNode {
     {room.phase === "lobby" && <section className="panel">
       <h1>Waiting room</h1><p>{room.players.length} {room.players.length === 1 ? "player" : "players"} · {room.totalRounds} rounds · {ROUND_SECONDS} seconds per round</p>
       <FishCustomizer key={me.color} color={me.color} busy={busy !== null} onSave={(color: FishColor): Promise<void> => act("customize", { color })} />
-      <label className="game-mode"><input type="checkbox" checked={room.girlfriendFriendly} disabled={!host || busy !== null} onChange={(event): void => { void act("mode", { girlfriendFriendly: event.target.checked }); }} /><span>Girlfriend friendly<small>No computer science or quant questions</small></span></label>
+      <label className="game-mode"><input type="checkbox" checked={room.girlfriendFriendly} disabled={!host || busy !== null} onChange={(event): void => { void act("mode", { girlfriendFriendly: event.target.checked }); }} /><span>Girlfriend friendly</span></label>
       <label className="scoring-mode" htmlFor="scoring-runs">Rarity scoring<small>Choose how many scores to request for each eligible answer.</small></label>
       <select id="scoring-runs" value={room.scoringRuns} disabled={!host || busy !== null} onChange={(event): void => {
         const scoringRuns = Number(event.target.value);
