@@ -67,6 +67,9 @@ test("only the host can choose one or three rarity scores in the lobby", (): voi
   assert.equal(publicRoom(room, GUEST, NOW).scoringRuns, 1);
   startGame(room, HOST, NOW);
   assert.throws((): void => setScoringRuns(room, HOST, 3), /in the lobby/);
+  const categoryId = currentRound(room).categoryId;
+  const answer = reserveAnswer({ room, token: HOST, answer: "Example", roundIndex: 0, now: currentRound(room).startedAt, retry: false });
+  finishAnswer({ room, roundIndex: 0, playerId: answer.playerId, attemptId: answer.attempt.id, judgment: { ...judgment(0.2), canonicalId: `${categoryId}:example` }, now: currentRound(room).startedAt + 1 });
   for (let index = 0; index < ROUNDS_PER_GAME; index += 1) {
     settleRound(room, currentRound(room).endsAt);
     nextRound(room, HOST, currentRound(room).endsAt);
@@ -74,6 +77,12 @@ test("only the host can choose one or three rarity scores in the lobby", (): voi
   }
   rematch(room, HOST);
   assert.equal(room.scoringRuns, 1);
+  assert.equal(room.scores[`${categoryId}:example`], 0.2);
+  setScoringRuns(room, HOST, 1);
+  assert.equal(room.scores[`${categoryId}:example`], 0.2);
+  setScoringRuns(room, HOST, 3);
+  assert.equal(room.scoringRuns, 3);
+  assert.deepEqual(room.scores, {});
 });
 
 test("scoring actions accept only one or three evaluations", (): void => {

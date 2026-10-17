@@ -83,6 +83,7 @@ export function setScoringRuns(room: Room, token: string, scoringRuns: ScoringRu
   requireHost(room, token);
   if (room.phase !== "lobby") throw new GameError("GAME_STARTED", "Change rarity scoring in the lobby.", 409);
   if (scoringRuns !== 1 && scoringRuns !== 3) throw new GameError("INVALID_REQUEST", "Choose one or three rarity scores.");
+  if (room.scoringRuns !== scoringRuns) room.scores = {};
   room.scoringRuns = scoringRuns;
 }
 
