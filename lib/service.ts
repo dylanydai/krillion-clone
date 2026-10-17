@@ -78,7 +78,7 @@ export function parseAction(value: unknown): Action {
   const body = value as Record<string, unknown>;
   const action = body.action;
   if (action === "mode") {
-    if (typeof body.girlfriendFriendly !== "boolean") throw new GameError("INVALID_REQUEST", "Girlfriend friendly mode must be enabled or disabled.");
+    if (typeof body.girlfriendFriendly !== "boolean") throw new GameError("INVALID_REQUEST", "Girlfriend mode must be enabled or disabled.");
     return { action, girlfriendFriendly: body.girlfriendFriendly };
   }
   if (action === "scoring") {
