@@ -138,7 +138,8 @@ The test runner enforces process timeouts.
 - `lib/game.ts`: Game rules and player-specific room views.
 - `lib/prompt-pack.ts`: Additional category titles and prompts.
 - `lib/archive-categories.ts`: Individual archived Daily Dive prompts, excluding equivalent existing categories.
-- `krillion-archive-questions.json`: Source dates, question numbers, and URLs for the imported archive. The September 21 source omits question 5.
+- `krillion-archive-questions.json`: Source dates, question numbers, and URLs for all 108 dives (July 16–October 31, 2026), totaling 756 questions. The Krillion Game archive supplies Dives #1–16 and #72–108 and fills the September 21 question 5 gap from the original source.
+- `krillion-archive-questions.txt`: The same source records in readable text. The latest imported dive is #108; future imports should start at #109. In Chrome, select each dive at `https://krillion-game.app/archive/`, expand **7-Round Depth Breakdown**, and read the seven numbered round prompts inside `#answers-content-container`. Keep existing source records and exclude equivalent prompts when adding playable categories. `scripts/extract_krillion_questions.py` targets the original Krillion Guide source and overwrites the archive files, so it does not preserve this combined import.
 - `lib/judge.ts`: Jev relevance checking, sequential jury scoring, and failure messages.
 - `lib/store.ts`: Shared Redis storage and explicit local memory storage.
 - `WORKFLOW_PLAN.md`: The original workflow design.

@@ -1,5 +1,565 @@
 [
   {
+    "date": "2026-07-16",
+    "source": "https://krillion-game.app/archive/?dive=1",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name an animal whose name starts with K"
+      },
+      {
+        "number": 2,
+        "text": "Name a country in Africa"
+      },
+      {
+        "number": 3,
+        "text": "Name a pasta shape"
+      },
+      {
+        "number": 4,
+        "text": "Name a Pixar feature film"
+      },
+      {
+        "number": 5,
+        "text": "Name a chemical element whose name ends in \"-ium\""
+      },
+      {
+        "number": 6,
+        "text": "Name a sport that has ever been part of the Summer Olympics"
+      },
+      {
+        "number": 7,
+        "text": "Name an instrument found in a symphony orchestra"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-17",
+    "source": "https://krillion-game.app/archive/?dive=2",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a country in the Americas (North, Central, or South)"
+      },
+      {
+        "number": 2,
+        "text": "Name a bird of prey"
+      },
+      {
+        "number": 3,
+        "text": "Name a type of cheese"
+      },
+      {
+        "number": 4,
+        "text": "Name a Beatles song"
+      },
+      {
+        "number": 5,
+        "text": "Name a letter of the Greek alphabet"
+      },
+      {
+        "number": 6,
+        "text": "Name a US state capital"
+      },
+      {
+        "number": 7,
+        "text": "Name a dog breed"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-18",
+    "source": "https://krillion-game.app/archive/?dive=3",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name the capital city of a European country"
+      },
+      {
+        "number": 2,
+        "text": "Name a citrus fruit"
+      },
+      {
+        "number": 3,
+        "text": "Name a movie that won the Best Picture Oscar"
+      },
+      {
+        "number": 4,
+        "text": "Name an officially recognized constellation"
+      },
+      {
+        "number": 5,
+        "text": "Name an NBA team"
+      },
+      {
+        "number": 6,
+        "text": "Name a root vegetable"
+      },
+      {
+        "number": 7,
+        "text": "Name a Greek god or goddess"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-19",
+    "source": "https://krillion-game.app/archive/?dive=4",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name an island country"
+      },
+      {
+        "number": 2,
+        "text": "Name a species of wild cat"
+      },
+      {
+        "number": 3,
+        "text": "Name a type of bread"
+      },
+      {
+        "number": 4,
+        "text": "Name a Studio Ghibli film"
+      },
+      {
+        "number": 5,
+        "text": "Name a bone in the human body"
+      },
+      {
+        "number": 6,
+        "text": "Name a card game"
+      },
+      {
+        "number": 7,
+        "text": "Name a US president"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-20",
+    "source": "https://krillion-game.app/archive/?dive=5",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a country in Asia"
+      },
+      {
+        "number": 2,
+        "text": "Name a venomous or poisonous animal"
+      },
+      {
+        "number": 3,
+        "text": "Name an herb or spice"
+      },
+      {
+        "number": 4,
+        "text": "Name a Walt Disney Animation Studios feature film"
+      },
+      {
+        "number": 5,
+        "text": "Name a unit of measurement"
+      },
+      {
+        "number": 6,
+        "text": "Name a city that has hosted the Summer or Winter Olympics"
+      },
+      {
+        "number": 7,
+        "text": "Name a type of flower"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-21",
+    "source": "https://krillion-game.app/archive/?dive=6",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a landlocked country"
+      },
+      {
+        "number": 2,
+        "text": "Name a shark species"
+      },
+      {
+        "number": 3,
+        "text": "Name a cocktail"
+      },
+      {
+        "number": 4,
+        "text": "Name a Harry Potter character"
+      },
+      {
+        "number": 5,
+        "text": "Name a moon of a planet in our solar system"
+      },
+      {
+        "number": 6,
+        "text": "Name a martial art"
+      },
+      {
+        "number": 7,
+        "text": "Name a mythical creature"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-22",
+    "source": "https://krillion-game.app/archive/?dive=7",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a river in Europe"
+      },
+      {
+        "number": 2,
+        "text": "Name a penguin species"
+      },
+      {
+        "number": 3,
+        "text": "Name a breakfast cereal brand"
+      },
+      {
+        "number": 4,
+        "text": "Name a James Bond film"
+      },
+      {
+        "number": 5,
+        "text": "Name a gemstone"
+      },
+      {
+        "number": 6,
+        "text": "Name a board game"
+      },
+      {
+        "number": 7,
+        "text": "Name a language spoken in Europe"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-23",
+    "source": "https://krillion-game.app/archive/?dive=8",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a country with a Mediterranean coastline"
+      },
+      {
+        "number": 2,
+        "text": "Name a whale species"
+      },
+      {
+        "number": 3,
+        "text": "Name a tropical fruit"
+      },
+      {
+        "number": 4,
+        "text": "Name a Scooby-Doo character"
+      },
+      {
+        "number": 5,
+        "text": "Name a type of cloud"
+      },
+      {
+        "number": 6,
+        "text": "Name a style of dance"
+      },
+      {
+        "number": 7,
+        "text": "Name a Roman emperor"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-24",
+    "source": "https://krillion-game.app/archive/?dive=9",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a desert"
+      },
+      {
+        "number": 2,
+        "text": "Name a snake species"
+      },
+      {
+        "number": 3,
+        "text": "Name a coffee drink"
+      },
+      {
+        "number": 4,
+        "text": "Name a video game console"
+      },
+      {
+        "number": 5,
+        "text": "Name a muscle in the human body"
+      },
+      {
+        "number": 6,
+        "text": "Name a style of hat"
+      },
+      {
+        "number": 7,
+        "text": "Name a Shakespeare play"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-25",
+    "source": "https://krillion-game.app/archive/?dive=10",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a former republic of the Soviet Union"
+      },
+      {
+        "number": 2,
+        "text": "Name a dinosaur"
+      },
+      {
+        "number": 3,
+        "text": "Name a pizza topping"
+      },
+      {
+        "number": 4,
+        "text": "Name a TV sitcom"
+      },
+      {
+        "number": 5,
+        "text": "Name a programming language"
+      },
+      {
+        "number": 6,
+        "text": "Name an Olympic track and field event"
+      },
+      {
+        "number": 7,
+        "text": "Name a nut"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-26",
+    "source": "https://krillion-game.app/archive/?dive=11",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a mountain range"
+      },
+      {
+        "number": 2,
+        "text": "Name an insect"
+      },
+      {
+        "number": 3,
+        "text": "Name a soup"
+      },
+      {
+        "number": 4,
+        "text": "Name a movie starring Tom Hanks"
+      },
+      {
+        "number": 5,
+        "text": "Name a shade of blue"
+      },
+      {
+        "number": 6,
+        "text": "Name a kitchen utensil"
+      },
+      {
+        "number": 7,
+        "text": "Name a Norse god or goddess"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-27",
+    "source": "https://krillion-game.app/archive/?dive=12",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a country where Spanish is an official language"
+      },
+      {
+        "number": 2,
+        "text": "Name a primate species"
+      },
+      {
+        "number": 3,
+        "text": "Name a candy bar"
+      },
+      {
+        "number": 4,
+        "text": "Name a boy band"
+      },
+      {
+        "number": 5,
+        "text": "Name an organ of the human body"
+      },
+      {
+        "number": 6,
+        "text": "Name a yoga pose"
+      },
+      {
+        "number": 7,
+        "text": "Name a US national park"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-28",
+    "source": "https://krillion-game.app/archive/?dive=13",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a country that drives on the left"
+      },
+      {
+        "number": 2,
+        "text": "Name an amphibian"
+      },
+      {
+        "number": 3,
+        "text": "Name an ice cream flavor"
+      },
+      {
+        "number": 4,
+        "text": "Name a Star Wars character"
+      },
+      {
+        "number": 5,
+        "text": "Name a collective noun for a group of animals (like 'murder' for crows)"
+      },
+      {
+        "number": 6,
+        "text": "Name a gym exercise"
+      },
+      {
+        "number": 7,
+        "text": "Name a classic French dish"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-29",
+    "source": "https://krillion-game.app/archive/?dive=14",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name the capital city of an Asian country"
+      },
+      {
+        "number": 2,
+        "text": "Name a species of spider"
+      },
+      {
+        "number": 3,
+        "text": "Name a type of sandwich"
+      },
+      {
+        "number": 4,
+        "text": "Name a Toy Story character"
+      },
+      {
+        "number": 5,
+        "text": "Name a cryptid (a creature like Bigfoot whose existence is claimed but unproven)"
+      },
+      {
+        "number": 6,
+        "text": "Name a sport played with a racquet or paddle"
+      },
+      {
+        "number": 7,
+        "text": "Name a Renaissance artist"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-30",
+    "source": "https://krillion-game.app/archive/?dive=15",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a country whose flag uses all three of red, white, and blue, and no other colors"
+      },
+      {
+        "number": 2,
+        "text": "Name a rodent"
+      },
+      {
+        "number": 3,
+        "text": "Name a type of tea"
+      },
+      {
+        "number": 4,
+        "text": "Name a Broadway musical"
+      },
+      {
+        "number": 5,
+        "text": "Name a metric (SI) prefix"
+      },
+      {
+        "number": 6,
+        "text": "Name a type of knot"
+      },
+      {
+        "number": 7,
+        "text": "Name an ancient civilization"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-07-31",
+    "source": "https://krillion-game.app/archive/?dive=16",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a strait (a narrow sea passage between two landmasses)"
+      },
+      {
+        "number": 2,
+        "text": "Name a creature that lives in the deep sea"
+      },
+      {
+        "number": 3,
+        "text": "Name a variety of chili pepper"
+      },
+      {
+        "number": 4,
+        "text": "Name a Pokémon from the original 151"
+      },
+      {
+        "number": 5,
+        "text": "Name a phobia (its formal name, like 'arachnophobia')"
+      },
+      {
+        "number": 6,
+        "text": "Name a world chess champion"
+      },
+      {
+        "number": 7,
+        "text": "Name a famous ship (real or fictional)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
     "date": "2026-08-01",
     "source": "https://krillionguide.com/en/answers/2026-08-01",
     "questions": [
@@ -1786,7 +2346,7 @@
   },
   {
     "date": "2026-09-21",
-    "source": "https://krillionguide.com/en/answers/2026-09-21",
+    "source": "https://krillion-game.app/archive/?dive=68",
     "questions": [
       {
         "number": 1,
@@ -1805,6 +2365,10 @@
         "text": "Name a space on a Monopoly board (US/UK)"
       },
       {
+        "number": 5,
+        "text": "Name a chemical element whose name ends in -ium"
+      },
+      {
         "number": 6,
         "text": "Name a part of a smartphone you can see or touch (accessories don't count)"
       },
@@ -1813,9 +2377,7 @@
         "text": "Name a country with both a U and an S in its name"
       }
     ],
-    "missing_question_numbers": [
-      5
-    ]
+    "missing_question_numbers": []
   },
   {
     "date": "2026-09-22",
@@ -1918,6 +2480,1301 @@
       {
         "number": 7,
         "text": "Name a platform people use to listen to music (apps and services, not devices)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-09-25",
+    "source": "https://krillion-game.app/archive/?dive=72",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a country with three syllables (English pronunciation)"
+      },
+      {
+        "number": 2,
+        "text": "Name a country without the letter A in its name"
+      },
+      {
+        "number": 3,
+        "text": "Name an African country’s most-spoken language."
+      },
+      {
+        "number": 4,
+        "text": "Name a video game that includes Mario"
+      },
+      {
+        "number": 5,
+        "text": "Name an international airport (must say full name)"
+      },
+      {
+        "number": 6,
+        "text": "Name a garden tool"
+      },
+      {
+        "number": 7,
+        "text": "Name a stock trading term"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-09-26",
+    "source": "https://krillion-game.app/archive/?dive=73",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name an app that comes preinstalled on an iPhone"
+      },
+      {
+        "number": 2,
+        "text": "Name a deodorant brand"
+      },
+      {
+        "number": 3,
+        "text": "Name something with wheels that isn't a vehicle"
+      },
+      {
+        "number": 4,
+        "text": "Name a shade of red (pinks don't count)"
+      },
+      {
+        "number": 5,
+        "text": "Name a state or province anywhere in the world (must be officially called a state or province)"
+      },
+      {
+        "number": 6,
+        "text": "Name a real-life melee weapon"
+      },
+      {
+        "number": 7,
+        "text": "Name a city with a metro system"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-09-27",
+    "source": "https://krillion-game.app/archive/?dive=74",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a fruit or vegetable that starts with S"
+      },
+      {
+        "number": 2,
+        "text": "Name a territory, constituent country or autonomous region"
+      },
+      {
+        "number": 3,
+        "text": "Name a Fire-type Pokémon"
+      },
+      {
+        "number": 4,
+        "text": "Name a city in Italy (must hold the official città title)"
+      },
+      {
+        "number": 5,
+        "text": "Name a career in finance"
+      },
+      {
+        "number": 6,
+        "text": "Name a sport that has a goalkeeper"
+      },
+      {
+        "number": 7,
+        "text": "Name a type of card (like a birthday card or a library card)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-09-28",
+    "source": "https://krillion-game.app/archive/?dive=75",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a superpower Superman has in the comics or movies"
+      },
+      {
+        "number": 2,
+        "text": "Name a language whose English name ends in -ish"
+      },
+      {
+        "number": 3,
+        "text": "Name something used to block the sun"
+      },
+      {
+        "number": 4,
+        "text": "Name a laptop brand"
+      },
+      {
+        "number": 5,
+        "text": "Name a part of an airplane, inside or out (anything built in or mounted)"
+      },
+      {
+        "number": 6,
+        "text": "Name a body part people have more than two of (like fingers)"
+      },
+      {
+        "number": 7,
+        "text": "Name an item of formal wear (clothing and shoes, not jewelry)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-09-29",
+    "source": "https://krillion-game.app/archive/?dive=76",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name something sold in a tube"
+      },
+      {
+        "number": 2,
+        "text": "Name a symbol or shape that appears on a national flag (like a star)"
+      },
+      {
+        "number": 3,
+        "text": "Name a type of chair"
+      },
+      {
+        "number": 4,
+        "text": "Name a standard type of insurance policy (all vehicles count as one type)"
+      },
+      {
+        "number": 5,
+        "text": "Name a song with over a billion streams on Spotify"
+      },
+      {
+        "number": 6,
+        "text": "Name an animal that can grow longer than 10 feet (3 m), including the tail"
+      },
+      {
+        "number": 7,
+        "text": "Name a product used to wash or style hair (product types, not brands)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-09-30",
+    "source": "https://krillion-game.app/archive/?dive=77",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a coffee shop chain"
+      },
+      {
+        "number": 2,
+        "text": "Name an item designed to be filled with air"
+      },
+      {
+        "number": 3,
+        "text": "Name a medical scan or imaging test (pictures of the body, not readouts like an EKG)"
+      },
+      {
+        "number": 4,
+        "text": "Name a power tool"
+      },
+      {
+        "number": 5,
+        "text": "Name a word for an animal's home (nests and shelters, not habitats like the ocean)"
+      },
+      {
+        "number": 6,
+        "text": "Name a phone accessory"
+      },
+      {
+        "number": 7,
+        "text": "Name a real-life language that uses a non-Latin writing system"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-01",
+    "source": "https://krillion-game.app/archive/?dive=78",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a feature on Instagram"
+      },
+      {
+        "number": 2,
+        "text": "Name a sauce used in Asian cooking (like soy sauce)"
+      },
+      {
+        "number": 3,
+        "text": "Name a music festival"
+      },
+      {
+        "number": 4,
+        "text": "Name a present-day nationality that ends in -ian (like Canadian)"
+      },
+      {
+        "number": 5,
+        "text": "Name a yellow fruit or vegetable"
+      },
+      {
+        "number": 6,
+        "text": "Name an app where you can video call"
+      },
+      {
+        "number": 7,
+        "text": "Name an animal with a color in its name"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-02",
+    "source": "https://krillion-game.app/archive/?dive=79",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a place in the Harry Potter universe"
+      },
+      {
+        "number": 2,
+        "text": "Name a type of shot in a sport (like a free throw)"
+      },
+      {
+        "number": 3,
+        "text": "Name a part of a shoe"
+      },
+      {
+        "number": 4,
+        "text": "Name a country whose name ends in N"
+      },
+      {
+        "number": 5,
+        "text": "Name a country with glaciers"
+      },
+      {
+        "number": 6,
+        "text": "Name a standard type of tax (currently levied in at least one country)"
+      },
+      {
+        "number": 7,
+        "text": "Name a type of living bird (general types; species names are grouped)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-03",
+    "source": "https://krillion-game.app/archive/?dive=80",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a TV genre"
+      },
+      {
+        "number": 2,
+        "text": "Name a device used to magnify things"
+      },
+      {
+        "number": 3,
+        "text": "Name a type of structure built underground (man-made)"
+      },
+      {
+        "number": 4,
+        "text": "Name a body part an animal has for fighting or protection"
+      },
+      {
+        "number": 5,
+        "text": "Name a type of sausage"
+      },
+      {
+        "number": 6,
+        "text": "Name a board, card or hand game made for exactly two players"
+      },
+      {
+        "number": 7,
+        "text": "Name a country in the Americas where Spanish is not the most widely spoken language"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-04",
+    "source": "https://krillion-game.app/archive/?dive=81",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a YouTuber with more than 10 million subscribers"
+      },
+      {
+        "number": 2,
+        "text": "Name a gas station chain"
+      },
+      {
+        "number": 3,
+        "text": "Name a country with both an O and an R in its name"
+      },
+      {
+        "number": 4,
+        "text": "Name a folder in an email inbox"
+      },
+      {
+        "number": 5,
+        "text": "Name something listed on a nutrition facts label"
+      },
+      {
+        "number": 6,
+        "text": "Name a country larger than the UK by area"
+      },
+      {
+        "number": 7,
+        "text": "Name a religious role or title in Christianity, Islam, Buddhism, Hinduism or Judaism"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-05",
+    "source": "https://krillion-game.app/archive/?dive=82",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name an artist with at least 1 million monthly listeners on Spotify"
+      },
+      {
+        "number": 2,
+        "text": "Name a part of a fruit"
+      },
+      {
+        "number": 3,
+        "text": "Name a country whose name ends in an \"ee\" sound (like Italy)"
+      },
+      {
+        "number": 4,
+        "text": "Name a TV brand"
+      },
+      {
+        "number": 5,
+        "text": "Name something you can do with a keyboard shortcut (like copy with Ctrl+C)"
+      },
+      {
+        "number": 6,
+        "text": "Name a fruit or vegetable that starts with P"
+      },
+      {
+        "number": 7,
+        "text": "Name a website or app built mainly for ratings and reviews"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-06",
+    "source": "https://krillion-game.app/archive/?dive=83",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a language ending in -ese"
+      },
+      {
+        "number": 2,
+        "text": "Name a sport or game where you score by getting a ball or object into a hole, hoop, basket or pocket"
+      },
+      {
+        "number": 3,
+        "text": "Name a type of brush"
+      },
+      {
+        "number": 4,
+        "text": "Name a home safety device (like a smoke detector)"
+      },
+      {
+        "number": 5,
+        "text": "Name something you can do to a photo in your phone's photo editor (like crop)"
+      },
+      {
+        "number": 6,
+        "text": "Name a form of pay a worker can receive"
+      },
+      {
+        "number": 7,
+        "text": "Name a country with both an A and an M in its name"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-07",
+    "source": "https://krillion-game.app/archive/?dive=84",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a dating app"
+      },
+      {
+        "number": 2,
+        "text": "Name a food you'd grate (kinds of cheese count once)"
+      },
+      {
+        "number": 3,
+        "text": "Name a stand-up comedian"
+      },
+      {
+        "number": 4,
+        "text": "Name a kind of gun that isn't designed as a weapon (like a glue gun)"
+      },
+      {
+        "number": 5,
+        "text": "Name a city in Europe with over 100,000 people"
+      },
+      {
+        "number": 6,
+        "text": "Name a kind of live stage show (like a magic show)"
+      },
+      {
+        "number": 7,
+        "text": "Name a solo sport (no card games, board games, or esports)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-08",
+    "source": "https://krillion-game.app/archive/?dive=85",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a sports car brand"
+      },
+      {
+        "number": 2,
+        "text": "Name something that uses a filter (physical filters, not photo filters)"
+      },
+      {
+        "number": 3,
+        "text": "Name a part of a shirt"
+      },
+      {
+        "number": 4,
+        "text": "Name a symptom of a cold or flu"
+      },
+      {
+        "number": 5,
+        "text": "Name a country whose name uses only one vowel letter (a, e, i, o, or u), repeats allowed (like Canada)"
+      },
+      {
+        "number": 6,
+        "text": "Name a ceremony or celebration that marks a stage of life"
+      },
+      {
+        "number": 7,
+        "text": "Name a sport normally played on grass"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-09",
+    "source": "https://krillion-game.app/archive/?dive=86",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a Justin Bieber song"
+      },
+      {
+        "number": 2,
+        "text": "Name an animal named after another animal (like seahorse)"
+      },
+      {
+        "number": 3,
+        "text": "Name a Twitch streamer with more than 500k followers"
+      },
+      {
+        "number": 4,
+        "text": "Name a country whose flag has both green and red"
+      },
+      {
+        "number": 5,
+        "text": "Name a city in the UK (towns count too)"
+      },
+      {
+        "number": 6,
+        "text": "Name an email service (like Gmail)"
+      },
+      {
+        "number": 7,
+        "text": "Name a type of camera (not brands)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-10",
+    "source": "https://krillion-game.app/archive/?dive=87",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a musical instrument"
+      },
+      {
+        "number": 2,
+        "text": "Name a vegetable that's botanically a fruit"
+      },
+      {
+        "number": 3,
+        "text": "Name a body part people have exactly two of (like ears)"
+      },
+      {
+        "number": 4,
+        "text": "Name a city with the word \"City\" in its name (like Mexico City)"
+      },
+      {
+        "number": 5,
+        "text": "Name a juice brand"
+      },
+      {
+        "number": 6,
+        "text": "Name a piece of baking equipment"
+      },
+      {
+        "number": 7,
+        "text": "Name an animal whose name ends in Y"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-11",
+    "source": "https://krillion-game.app/archive/?dive=88",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name something sold in a roll"
+      },
+      {
+        "number": 2,
+        "text": "Name a type of table (the furniture)"
+      },
+      {
+        "number": 3,
+        "text": "Name a metal (pure elements only; alloys like steel don't count)"
+      },
+      {
+        "number": 4,
+        "text": "Name a kind of license or permit a person can get"
+      },
+      {
+        "number": 5,
+        "text": "Name an app or service for paying or sending money (like PayPal; banks and card networks don't count)"
+      },
+      {
+        "number": 6,
+        "text": "Name a sport that is a race (fastest to the finish wins)"
+      },
+      {
+        "number": 7,
+        "text": "Name a country that borders Iraq or Iran by land"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-12",
+    "source": "https://krillion-game.app/archive/?dive=89",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a job-search website or app (like LinkedIn)"
+      },
+      {
+        "number": 2,
+        "text": "Name an item of winter clothing"
+      },
+      {
+        "number": 3,
+        "text": "Name a body part animals have but humans don't (like wings)"
+      },
+      {
+        "number": 4,
+        "text": "Name a hotel brand"
+      },
+      {
+        "number": 5,
+        "text": "Name a department in a company (like HR)"
+      },
+      {
+        "number": 6,
+        "text": "Name a country with 8 or more letters"
+      },
+      {
+        "number": 7,
+        "text": "Name a feature on YouTube"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-13",
+    "source": "https://krillion-game.app/archive/?dive=90",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name an Amazon product, service or company Amazon owns"
+      },
+      {
+        "number": 2,
+        "text": "Name a fruit or vegetable that starts with B"
+      },
+      {
+        "number": 3,
+        "text": "Name a driving or traffic offence"
+      },
+      {
+        "number": 4,
+        "text": "Name a fictional character played by more than one actor in live-action movies"
+      },
+      {
+        "number": 5,
+        "text": "Name a country that has part of the Alps, the Andes or the Himalayas"
+      },
+      {
+        "number": 6,
+        "text": "Name a city in Asia with over 1 million people within city limits"
+      },
+      {
+        "number": 7,
+        "text": "Name a shampoo brand"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-14",
+    "source": "https://krillion-game.app/archive/?dive=91",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name an app or website for writing documents or taking notes"
+      },
+      {
+        "number": 2,
+        "text": "Name a language that’s the most spoken in at least one country in the Americas."
+      },
+      {
+        "number": 3,
+        "text": "Name the current capital of a state or province anywhere in the world (must be officially called a state or province)"
+      },
+      {
+        "number": 4,
+        "text": "Name a current or former NBA, MLB, Premier League or NFL team"
+      },
+      {
+        "number": 5,
+        "text": "Name a character from the Cars movies"
+      },
+      {
+        "number": 6,
+        "text": "Name a type of powder"
+      },
+      {
+        "number": 7,
+        "text": "Name something you shake before using it"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-15",
+    "source": "https://krillion-game.app/archive/?dive=92",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a type of astronomical object found in space (like an asteroid)"
+      },
+      {
+        "number": 2,
+        "text": "Name a professional sports league with at least 10 teams"
+      },
+      {
+        "number": 3,
+        "text": "Name a living animal that weighs over a metric ton (1,000 kg)"
+      },
+      {
+        "number": 4,
+        "text": "Name a movie featuring Natalie Portman (like Star Wars)"
+      },
+      {
+        "number": 5,
+        "text": "Name a city south of the equator with over 100,000 people (by metro area)"
+      },
+      {
+        "number": 6,
+        "text": "Name an app or service meant for editing photos"
+      },
+      {
+        "number": 7,
+        "text": "Name a country whose name starts with two consonants (like France; Y counts too)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-16",
+    "source": "https://krillion-game.app/archive/?dive=93",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name something that comes in a pump bottle (like moisturizer)"
+      },
+      {
+        "number": 2,
+        "text": "Name a service you can get at a hair salon"
+      },
+      {
+        "number": 3,
+        "text": "Name a feature a modern car can have (like cruise control)"
+      },
+      {
+        "number": 4,
+        "text": "Name a country in East Africa"
+      },
+      {
+        "number": 5,
+        "text": "Name a white sauce, dip, or condiment"
+      },
+      {
+        "number": 6,
+        "text": "Name a sport where people sit when they compete (no esports, board games or card games)"
+      },
+      {
+        "number": 7,
+        "text": "Name something that uses steam"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-17",
+    "source": "https://krillion-game.app/archive/?dive=94",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a way to prepare potatoes"
+      },
+      {
+        "number": 2,
+        "text": "Name an animal whose name is exactly four letters long"
+      },
+      {
+        "number": 3,
+        "text": "Name someone who’s won MVP (NBA/NFL/MLB), Premier League Player of the Season, or won the Ballon d’Or"
+      },
+      {
+        "number": 4,
+        "text": "Name a chemical element whose symbol is one letter"
+      },
+      {
+        "number": 5,
+        "text": "Name a type of station (like a train station)"
+      },
+      {
+        "number": 6,
+        "text": "Name a country whose name ends in the letter E"
+      },
+      {
+        "number": 7,
+        "text": "Name a superhero team"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-18",
+    "source": "https://krillion-game.app/archive/?dive=95",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a fruit bigger than an apple"
+      },
+      {
+        "number": 2,
+        "text": "Name a symbol of Hinduism, Judaism, Christianity, Islam or Buddhism (like the cross)"
+      },
+      {
+        "number": 3,
+        "text": "Name a perfume or fragrance brand"
+      },
+      {
+        "number": 4,
+        "text": "Name a sport where competitors wear gloves"
+      },
+      {
+        "number": 5,
+        "text": "Name a leg exercise at the gym (no cardio)"
+      },
+      {
+        "number": 6,
+        "text": "Name a Fortnite character or skin (sidekicks/pets don't count)"
+      },
+      {
+        "number": 7,
+        "text": "Name a rapper with more than 500k monthly Spotify listeners"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-19",
+    "source": "https://krillion-game.app/archive/?dive=96",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a female artist with over 500,000 monthly listeners on Spotify"
+      },
+      {
+        "number": 2,
+        "text": "Name a foul or rule violation in soccer, basketball, American football, cricket, rugby or ice hockey"
+      },
+      {
+        "number": 3,
+        "text": "Name an underwear brand"
+      },
+      {
+        "number": 4,
+        "text": "Name a university in the US or UK"
+      },
+      {
+        "number": 5,
+        "text": "Name a language that’s the most spoken in at least two countries"
+      },
+      {
+        "number": 6,
+        "text": "Name a character that has been playable in a Super Smash Bros. game"
+      },
+      {
+        "number": 7,
+        "text": "Name a fruit normally eaten with its skin on"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-20",
+    "source": "https://krillion-game.app/archive/?dive=97",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name something sold as a stick or in sticks (food on a stick doesn’t count)."
+      },
+      {
+        "number": 2,
+        "text": "Name a food made by mashing or puréeing (like guacamole)"
+      },
+      {
+        "number": 3,
+        "text": "Name a country with the letter D in its name"
+      },
+      {
+        "number": 4,
+        "text": "Name a device made to blow air"
+      },
+      {
+        "number": 5,
+        "text": "Name a mammal smaller than a house cat"
+      },
+      {
+        "number": 6,
+        "text": "Name an internet service provider"
+      },
+      {
+        "number": 7,
+        "text": "Name something that has a saddle (like a bicycle)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-21",
+    "source": "https://krillion-game.app/archive/?dive=98",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a TV show that's rated 8.5+ on IMDb (1,000+ votes)"
+      },
+      {
+        "number": 2,
+        "text": "Name a current NBA player (must be on an NBA team)"
+      },
+      {
+        "number": 3,
+        "text": "Name a food you have to shell or crack open before eating"
+      },
+      {
+        "number": 4,
+        "text": "Name a vehicle that doesn't travel on wheels"
+      },
+      {
+        "number": 5,
+        "text": "Name a body part people have exactly one of (like the nose)"
+      },
+      {
+        "number": 6,
+        "text": "Name a country that borders Greece or Austria"
+      },
+      {
+        "number": 7,
+        "text": "Name an extra that airlines charge for"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-22",
+    "source": "https://krillion-game.app/archive/?dive=99",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a character from Attack on Titan, One Piece or Naruto"
+      },
+      {
+        "number": 2,
+        "text": "Name a job with median annual pay over $100,000 in the US"
+      },
+      {
+        "number": 3,
+        "text": "Name a game with a number in its name (sequels and 3D variants don't count)"
+      },
+      {
+        "number": 4,
+        "text": "Name a field, art or skill ending in -graphy"
+      },
+      {
+        "number": 5,
+        "text": "Name a country with a five-letter English name"
+      },
+      {
+        "number": 6,
+        "text": "Name an environmental problem (like pollution)"
+      },
+      {
+        "number": 7,
+        "text": "Name a South Asian dish (India, Pakistan, Bangladesh, Sri Lanka, Nepal, Bhutan, Maldives, Afghanistan)"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-23",
+    "source": "https://krillion-game.app/archive/?dive=100",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a branded fast-food menu item (like the Big Mac)."
+      },
+      {
+        "number": 2,
+        "text": "Name an animal that sprays, spits or squirts something to defend itself."
+      },
+      {
+        "number": 3,
+        "text": "Name a part of a 2D or 3D shape (like a radius)."
+      },
+      {
+        "number": 4,
+        "text": "Name an upper-body gym exercise (strength exercises only; no full-body moves)."
+      },
+      {
+        "number": 5,
+        "text": "Name a Nintendo Wii game."
+      },
+      {
+        "number": 6,
+        "text": "Name a rap song with over 100 million Spotify streams."
+      },
+      {
+        "number": 7,
+        "text": "Name a machine traditionally operated by inserting coins."
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-24",
+    "source": "https://krillion-game.app/archive/?dive=101",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a movie first released in theaters in 2026"
+      },
+      {
+        "number": 2,
+        "text": "Name something with a spinning blade"
+      },
+      {
+        "number": 3,
+        "text": "Name a book that has sold at least 500,000 copies worldwide."
+      },
+      {
+        "number": 4,
+        "text": "Name a word that could be in Wordle (5 letters)"
+      },
+      {
+        "number": 5,
+        "text": "Name an app or program that comes built into Windows or macOS (older versions count)."
+      },
+      {
+        "number": 6,
+        "text": "Name a language that originated in South Asia or Southeast Asia"
+      },
+      {
+        "number": 7,
+        "text": "Name something with a legal minimum age"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-25",
+    "source": "https://krillion-game.app/archive/?dive=102",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a type of bed (for sleeping)"
+      },
+      {
+        "number": 2,
+        "text": "Name a food or ingredient that costs over US$100/kg ($45/lb), like caviar"
+      },
+      {
+        "number": 3,
+        "text": "Name a song that has reached number one on the Billboard Hot 100"
+      },
+      {
+        "number": 4,
+        "text": "Name a national park anywhere in the world"
+      },
+      {
+        "number": 5,
+        "text": "Name a TV comedy (tagged Comedy on IMDb, 1,000+ votes)"
+      },
+      {
+        "number": 6,
+        "text": "Name a country with a desert climate (in any part of it)"
+      },
+      {
+        "number": 7,
+        "text": "Name a player currently on an English Premier League or NFL team"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-26",
+    "source": "https://krillion-game.app/archive/?dive=103",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a currency worth less than the US dollar"
+      },
+      {
+        "number": 2,
+        "text": "Name a city whose name ends in -ton"
+      },
+      {
+        "number": 3,
+        "text": "Name something traditionally expressed as a percentage (like body fat)"
+      },
+      {
+        "number": 4,
+        "text": "Name something used to hit a ball in a sport (the same tool counts once across sports)"
+      },
+      {
+        "number": 5,
+        "text": "Name a Latin American dish"
+      },
+      {
+        "number": 6,
+        "text": "Name a fruit or vegetable with a one-syllable name"
+      },
+      {
+        "number": 7,
+        "text": "Name a phone setting you can switch on and off"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-27",
+    "source": "https://krillion-game.app/archive/?dive=104",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a bird that lives in or by water"
+      },
+      {
+        "number": 2,
+        "text": "Name something with physical pages (named works don't count)"
+      },
+      {
+        "number": 3,
+        "text": "Name a type of ball outside of sports"
+      },
+      {
+        "number": 4,
+        "text": "Name a boy band or girl group with over 500,000 monthly listeners on Spotify"
+      },
+      {
+        "number": 5,
+        "text": "Name a part of the school year (events like prom count too)"
+      },
+      {
+        "number": 6,
+        "text": "Name a country whose flag has a white stripe through the centre (horizontal or vertical)."
+      },
+      {
+        "number": 7,
+        "text": "Name a one-word food or drink that starts with Ch"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-28",
+    "source": "https://krillion-game.app/archive/?dive=105",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a pasta dish"
+      },
+      {
+        "number": 2,
+        "text": "Name a part of the human head"
+      },
+      {
+        "number": 3,
+        "text": "Name a region of the world that spans multiple countries (like the Middle East)"
+      },
+      {
+        "number": 4,
+        "text": "Name a food or drink that has an emoji"
+      },
+      {
+        "number": 5,
+        "text": "Name a superpower any superhero has in the MCU"
+      },
+      {
+        "number": 6,
+        "text": "Name a 3+ letter word you can spell with the letters in \"krillion\" (using each letter only as many times as it appears)"
+      },
+      {
+        "number": 7,
+        "text": "Name something you ride while standing up"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-29",
+    "source": "https://krillion-game.app/archive/?dive=106",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a French or British food"
+      },
+      {
+        "number": 2,
+        "text": "Name something you can measure about the human body"
+      },
+      {
+        "number": 3,
+        "text": "Name a strategy board game"
+      },
+      {
+        "number": 4,
+        "text": "Name an animal with a one-word name containing \"ck\""
+      },
+      {
+        "number": 5,
+        "text": "Name a country where another religion has more followers than Christianity"
+      },
+      {
+        "number": 6,
+        "text": "Name someone who has been a teammate of Lionel Messi, Cristiano Ronaldo, LeBron James or Tom Brady"
+      },
+      {
+        "number": 7,
+        "text": "Name a hair type, texture, or natural color"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-30",
+    "source": "https://krillion-game.app/archive/?dive=107",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a sport where athletes do flips or somersaults"
+      },
+      {
+        "number": 2,
+        "text": "Name a city whose name starts with the word Los, Las, La, Le, El or The"
+      },
+      {
+        "number": 3,
+        "text": "Name something used to grip or pick things up"
+      },
+      {
+        "number": 4,
+        "text": "Name a non-human character from Star Wars, the MCU, or Lord of the Rings"
+      },
+      {
+        "number": 5,
+        "text": "Name a nail care product or tool (types, not brands)"
+      },
+      {
+        "number": 6,
+        "text": "Name a way to contact someone (methods, not brands/apps)"
+      },
+      {
+        "number": 7,
+        "text": "Name a fast food chain that operates in more than one country"
+      }
+    ],
+    "missing_question_numbers": []
+  },
+  {
+    "date": "2026-10-31",
+    "source": "https://krillion-game.app/archive/?dive=108",
+    "questions": [
+      {
+        "number": 1,
+        "text": "Name a Halloween tradition"
+      },
+      {
+        "number": 2,
+        "text": "Name a chocolate with wafer, biscuit, or cookie in it"
+      },
+      {
+        "number": 3,
+        "text": "Name a fictional character who wears a mask"
+      },
+      {
+        "number": 4,
+        "text": "Name an animal that feeds on blood"
+      },
+      {
+        "number": 5,
+        "text": "Name an orange fruit or vegetable"
+      },
+      {
+        "number": 6,
+        "text": "Name a country with black or orange on its flag"
+      },
+      {
+        "number": 7,
+        "text": "Name a word that starts with “boo”"
       }
     ],
     "missing_question_numbers": []

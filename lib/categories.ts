@@ -25,6 +25,7 @@ const CS_QUANT_CATEGORIES = new Set<CategoryId>([
   "compiler-optimizations", "graph-theory-concepts", "git-commands", "python-libraries",
   "build-tools", "web-frameworks", "command-line-shells", "llms",
   "archive-2026-08-16-7", "archive-2026-08-23-5", "archive-2026-08-24-2", "archive-2026-09-22-4", "archive-2026-09-22-5",
+  "archive-2026-09-25-7", "archive-2026-09-27-5", "archive-2026-10-06-5", "archive-2026-10-24-5",
 ]);
 
 export function categoriesForMode(girlfriendFriendly: boolean): Category[] {
